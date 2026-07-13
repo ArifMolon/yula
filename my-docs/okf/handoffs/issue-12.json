@@ -6,74 +6,82 @@
   "status": "Progress",
   "branch": "feature/12-validate-task-execution-domain-flow",
   "spec_worktree": ".worktrees/spec-domain-discovery",
-  "objective": "Create the canonical end-to-end Event Storming record for the task execution flow from user intent and Command through required approval to the observable Execution result.",
+  "objective": "Create the canonical end-to-end Event Storming record for recalling project progress and continuing an eligible Task through required approval to an observable Execution result.",
   "ubiquitous_language": [
     "Command",
     "Domain Event",
     "Policy",
     "Hotspot",
+    "Project",
+    "Task",
     "Execution",
+    "ProjectProgressReport",
+    "Delegated Execution",
     "ApprovalRequest",
     "Published Language"
   ],
   "invariants": [
-    "The flow names every actor, Command, past-tense Domain Event, Policy, and Hotspot from intent through result.",
-    "Orchestration ownership and every cross-context Published Language interaction are explicit.",
-    "Ownership conflicts are recorded as Hotspots with evidence and a proposed resolution path.",
-    "The canonical Event Storming record is owned by the main checkout under my-docs/okf/event-storming."
+    "A Project resolves uniquely before ReportProjectProgress begins.",
+    "A ProjectProgressReport uses only Project-configured provenance-bearing sources and never hides missing sources or conflicts.",
+    "ProjectProgressReported occurs only after the user can observe the report.",
+    "A Task completes only after its acceptance criteria pass and no required human decision remains pending.",
+    "Delegated Execution is scoped, expiring, risk-ceiling-limited, and concurrency-limited and never bypasses R3 or R4 approval.",
+    "A worker may make the initial attempt plus at most three retries, but an uncertain external effect must be reconciled before retry.",
+    "DevelopmentPublishedForReview requires the expected remote commit and correctly targeted draft pull request to be verified."
   ],
   "decisions": [
-    "Domain-facing child issue titles use the Domain Discovery work kind; tracer bullet remains a delivery pattern only.",
-    "Issue #12 is the only selected dependency-frontier issue in this spec worktree.",
-    "Product-owner review is required after the issue #12 Event Storming record is drafted and before the issue can become Done."
+    "The main scenario starts with ReportProjectProgress and continues with PublishDevelopmentForReview.",
+    "ReportProjectProgress is an R0 Command that starts a fresh observable verification Execution without changing project state.",
+    "Task is the Orchestration term; GitHub Issue is external Integration language and spec worktree is delivery-policy language.",
+    "Task uses Planned, Ready, Active, WaitingForReview, Completed, and Cancelled; Blocked is an eligibility condition rather than a state.",
+    "Delegated Execution is the canonical term; YOLO Mode may be a UI alias and DelegateTaskExecution is R2.",
+    "Mobile chat may embed a secure ApprovalRequest-bound card, but free-form chat text is not an approval decision.",
+    "Detailed trace and cost presentation is outside the MVP; minimum audit and diagnostic evidence remains required.",
+    "The product owner approved the conversational model on 2026-07-13; the written canonical record still requires product-owner review before status progression."
   ],
-  "implementation_state": "Issue #12 is selected and its feature branch is active. Domain Discovery has not begun. Commit 95e8d30 on the spec branch repaired sparse-worktree baseline validation and worktree-local pnpm configuration before feature start.",
+  "implementation_state": "The product-owner Domain Discovery conversation resolved the task-execution actors, Commands, Domain Events, Policies, Hotspots, invariants, Task lifecycle, Published Language boundaries, failure scenarios, and acceptance evidence. The canonical draft now exists at my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md. No product code was implemented and no next issue was selected.",
   "changed_code": [
-    "scripts/spec-worktree",
-    "scripts/repository-paths.mjs",
-    "scripts/validate-operating-model.mjs",
-    "tests/agent-instructions.test.mjs",
-    "tests/operating-model.test.mjs",
-    "tests/repository-paths.test.mjs",
-    "tests/worktree-policy.test.mjs"
+    "my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md",
+    "my-docs/okf/handoffs/issue-12.json"
   ],
   "verification": [
     {
       "command": "node --test tests/*.test.mjs",
-      "result": "PASS: 50 tests, 0 failures in .worktrees/spec-domain-discovery at commit 95e8d30",
-      "observed_at": "2026-07-13T03:47:38Z"
+      "result": "PASS: 48 tests, 0 failures in the main checkout with the canonical Event Storming draft present",
+      "observed_at": "2026-07-13T16:17:25Z"
     },
     {
       "command": "node scripts/validate-operating-model.mjs",
-      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review.",
-      "observed_at": "2026-07-13T03:47:38Z"
+      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review",
+      "observed_at": "2026-07-13T16:17:25Z"
     },
     {
       "command": "git diff --check",
-      "result": "PASS: no whitespace errors",
-      "observed_at": "2026-07-13T03:47:38Z"
+      "result": "PASS: no whitespace errors in the Event Storming record or updated HandoffBrief",
+      "observed_at": "2026-07-13T16:17:25Z"
     },
     {
-      "command": "GitHub Project item query for ArifMolon/yula#12",
-      "result": "Progress; Phase 0; Orchestration; R1; SPEC-P0-domain-discovery; Human Review Required; Size S",
-      "observed_at": "2026-07-13T03:47:38Z"
+      "command": "Live GitHub issue and Project query for ArifMolon/yula#12",
+      "result": "OPEN; Progress; Phase 0; Orchestration; R1; SPEC-P0-domain-discovery; Human Review Required; Size S",
+      "observed_at": "2026-07-13T16:17:25Z"
     }
   ],
-  "active_lessons": [],
-  "open_loops": [
-    "Confirm the complete actor set for user intent, approval, execution, runtime, and observation.",
-    "Name the intent-expressing Commands and past-tense Domain Events without inventing synonyms outside the Orchestration Ubiquitous Language.",
-    "Make the Policies, Hotspots, Published Language boundaries, and context ownership conflicts explicit.",
-    "Define the evidence and review artifact the product owner will use to accept the issue #12 Event Storming record."
+  "active_lessons": [
+    "lesson-delivery-patterns-are-not-domain-language"
   ],
-  "next_action": "Conduct the issue #12 Domain Discovery session with the product owner to resolve actors, Commands, Domain Events, Policies, Hotspots, Published Language boundaries, and review evidence before drafting the canonical Event Storming record.",
+  "open_loops": [
+    "The product owner must review the written canonical Event Storming record after creation and request changes or explicitly accept it.",
+    "Accepted Ubiquitous Language candidates remain candidates until the separate Phase 0 glossary workflow ratifies them.",
+    "After written-record acceptance, refresh verification and use the approved issue/spec workflow to decide whether issue #12 may transition to Review."
+  ],
+  "next_action": "Ask the product owner to review my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md and explicitly accept it or request changes.",
   "blockers": [
-    "The issue #12 domain flow contract is not yet explicit enough to draft canonically without product-owner input."
+    "Required product-owner review of the written canonical Event Storming record is pending."
   ],
   "pending_hitl": [
-    "Product-owner review of the completed issue #12 Event Storming record is required before Review can transition to Done; no approval decision has been requested or recorded yet."
+    "Product-owner review of the written issue #12 Event Storming record is required before Review can transition to Done; no written-record approval decision has been recorded yet."
   ],
   "updater": "codex",
-  "session": "codex-2026-07-13-spec-1-issue-12",
-  "updated_at": "2026-07-13T03:47:38Z"
+  "session": "codex-2026-07-13-issue-12-domain-discovery",
+  "updated_at": "2026-07-13T16:17:25Z"
 }
