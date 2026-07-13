@@ -6,6 +6,7 @@ permissions:
   contents: write
   pull-requests: write
   issues: read
+  actions: read
 jobs:
   request:
     if: contains(github.event.issue.labels.*.name, 'kind:capability')
@@ -17,14 +18,16 @@ jobs:
       - name: Validate operating model
         run: node scripts/validate-operating-model.mjs
       - name: Validate Project fields and latest HandoffBrief
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           handoff="my-docs/okf/handoffs/issue-${{ github.event.issue.number }}.json"
           test -f "$handoff"
-          node -e 'const fs=require("fs"); const p=process.argv[1]; const value=JSON.parse(fs.readFileSync(p)); if(value.status!=="Done") throw Error("Project/Handoff status must be Done");' "$handoff"
-          cp "$handoff" "$RUNNER_TEMP/validated-issue.json"
+          gh project item-list 5 --owner ArifMolon --limit 100 --format json > "$RUNNER_TEMP/project-items.json"
+          node scripts/validate-project-item.mjs --handoff "$handoff" --project-items "$RUNNER_TEMP/project-items.json" --issue-number "${{ github.event.issue.number }}" --output "$RUNNER_TEMP/validated-issue.json"
       - name: Build deterministic KnowledgeUpdateRequested payload
         run: node scripts/request-knowledge-update.mjs --fixture "$RUNNER_TEMP/validated-issue.json" --write
-      - name: Open knowledge-only pull request
+      - name: Open and verify knowledge-only pull request
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -33,4 +36,17 @@ jobs:
           git add my-docs/okf
           git commit -m "docs: request knowledge update for #${{ github.event.issue.number }}"
           git push origin "$branch"
-          gh pr create --title "Knowledge update for #${{ github.event.issue.number }}" --body "Generated from validated issue-close evidence. No lessons, plans, ADRs, prompts, or approvals are invented." --base main --head "$branch"
+          pr_url=$(gh pr create --title "Knowledge update for #${{ github.event.issue.number }}" --body "Generated from validated issue-close evidence. No lessons, plans, ADRs, prompts, or approvals are invented." --base main --head "$branch")
+          node scripts/validate-operating-model.mjs
+          test -s my-docs/okf/log.md # provenance and links are validated by the operating-model gate
+          gh pr merge "$pr_url" --auto --squash
+      - name: Emit structured failure-artifact for Review Inbox ingestion
+        if: failure()
+        run: |
+          mkdir -p "$RUNNER_TEMP/failure-artifact"
+          printf '%s\n' '{"type":"ReviewInboxIntegrationFailure","workflow":"issue-close-knowledge","issue":"${{ github.event.issue.number }}","run":"${{ github.run_id }}"}' > "$RUNNER_TEMP/failure-artifact/review-inbox-failure.json"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: failure-artifact
+          path: ${{ runner.temp }}/failure-artifact/review-inbox-failure.json

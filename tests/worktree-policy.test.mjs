@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { planBootstrap, planFeatureStart, planCleanup } from '../scripts/worktree-policy.mjs';
+
+const exec = promisify(execFile);
 
 test('bootstrap creates one spec worktree with shared pnpm store', () => {
   const plan = planBootstrap('phase-0-foundation', { existingWorktrees: [] });
@@ -38,4 +42,11 @@ test('clean merged spec can be removed and pruned', () => {
   const plan = planCleanup('phase-0-foundation', {});
   assert.equal(plan.allowed, true);
   assert.deepEqual(plan.actions, ['remove .worktrees/spec-phase-0-foundation', 'delete spec/phase-0-foundation', 'git worktree prune']);
+});
+
+test('feature commands use the plan interface without a spec argument', async () => {
+  const started = await exec('scripts/spec-worktree', ['--dry-run', 'start-feature', '12', 'execution-lifecycle']);
+  assert.match(started.stdout, /feature\/12-execution-lifecycle/);
+  const finished = await exec('scripts/spec-worktree', ['--dry-run', 'finish-feature', '12']);
+  assert.match(finished.stdout, /finish reviewed feature issue 12/);
 });

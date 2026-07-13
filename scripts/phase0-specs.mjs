@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { contextNames } from './domain-catalog.mjs';
 
 export const phase0Specs = Object.freeze([
   { id:'SPEC-P0-domain-discovery', title:'[Spec] Validate YULA domain flows and Context Map', context:'Orchestration', contextLabel:'context:orchestration', risk:'R1', review:'Required', size:'M', phase:'0', outcome:'YULA has an evidence-backed Event Storming record for task execution, tool onboarding, and knowledge ingestion, with hotspots and Context Map corrections visible before implementation.', language:['Command','Domain Event','Policy','Hotspot','Bounded Context','Context Map'], invariants:['Every main flow names actors, commands, events, policies, and hotspots.','Context ownership conflicts are resolved or recorded as explicit decisions.'], published:['Event Storming record','Context Map change proposal'], dependencies:[], exit:['Phase 0 Event Storming record is canonical under my-docs/okf/event-storming.','Hotspots and Context Map conclusions are reviewed by the product owner.'] },
@@ -15,6 +16,24 @@ export const phase0Specs = Object.freeze([
   { id:'SPEC-P0-model-adapter-spike', title:'[Spec] Prove the replaceable Model Gateway adapter', context:'Model Gateway', contextLabel:'context:model-gateway', risk:'R2', review:'Policy', size:'S', phase:'0', outcome:'One provider adapter and one local model execute through the same ModelGatewayPort contract with version, cost, and trace metadata.', language:['ModelGatewayPort','ModelProvider','ModelProfile','ModelPolicy'], invariants:['Domain code imports no provider SDK.','Provider and model version are recorded on Execution.','Contract tests use fakes and make no real provider call.'], published:['Model request and response contract'], dependencies:['SPEC-P0-seed-decisions','SPEC-P0-monorepo-foundation'], exit:['Provider and local-model smoke evidence satisfy the same contract.','Adapter replacement requires no domain change.'] },
 ]);
 
+export function validatePhase0Catalog(specs) {
+  const errors = [];
+  const ids = new Set();
+  for (const spec of specs) {
+    if (ids.has(spec.id)) errors.push(`duplicate Spec identifier: ${spec.id}`); else ids.add(spec.id);
+    if (spec.phase !== '0') errors.push(`${spec.id}: Phase must be 0`);
+    if (!contextNames.includes(spec.context)) errors.push(`${spec.id}: invalid Bounded Context`);
+    if (!['R0', 'R1', 'R2', 'R3', 'R4'].includes(spec.risk)) errors.push(`${spec.id}: invalid RiskLevel`);
+    if (!['Policy', 'Required'].includes(spec.review)) errors.push(`${spec.id}: invalid Human Review`);
+    if (!['XS', 'S', 'M'].includes(spec.size)) errors.push(`${spec.id}: invalid Size`);
+    for (const field of ['outcome', 'language', 'invariants', 'published', 'dependencies', 'exit']) if (spec[field] == null) errors.push(`${spec.id}: missing ${field}`);
+  }
+  if (errors.length) throw new Error(errors.join('; '));
+  return specs;
+}
+
+validatePhase0Catalog(phase0Specs);
+
 export function renderSpecBody(spec) {
   const bullets = values => values.length ? values.map(value => `- ${value}`).join('\n') : '- None';
   return `Phase: ${spec.phase}\nSpec: ${spec.id}\nRisk: ${spec.risk}\nSize: ${spec.size}\n\n## Outcome\n\n${spec.outcome}\n\n## Bounded Context\n\n${spec.context}\n\n## Ubiquitous Language\n\n${bullets(spec.language)}\n\n## Invariants\n\n${bullets(spec.invariants)}\n\n## Published Language\n\n${bullets(spec.published)}\n\n## Dependencies\n\n${bullets(spec.dependencies)}\n\n## HITL Policy\n\n${spec.review}\n\n## Exit Criteria\n\n${bullets(spec.exit)}\n\n## Child Issues\n\nNone — child issues are created only after this spec is selected.\n`;
@@ -23,6 +42,14 @@ export function renderSpecBody(spec) {
 function gh(args) { return execFileSync('gh', args, { encoding:'utf8', stdio:['ignore','pipe','inherit'] }).trim(); }
 const config = JSON.parse(readFileSync(new URL('../.github/yula-project.json', import.meta.url), 'utf8'));
 
+export function findExistingSpec(issues, specId) {
+  return issues.find(issue => !issue.pull_request && new RegExp(`^Spec: ${specId}$`, 'm').test(issue.body ?? ''));
+}
+
+function repositoryIssues() {
+  return JSON.parse(gh(['api', `repos/${config.repository}/issues?state=all&per_page=100`]));
+}
+
 function setField(itemId, field, value, text = false) {
   const args = ['project','item-edit','--id',itemId,'--project-id',config.project.id,'--field-id',config.fields[field]];
   if (text) args.push('--text',value); else args.push('--single-select-option-id',config.options[field][value]);
@@ -30,10 +57,10 @@ function setField(itemId, field, value, text = false) {
 }
 
 export function applyPhase0Specs() {
-  const existing = JSON.parse(gh(['issue','list','--repo',config.repository,'--state','all','--limit','200','--json','number,title,url']));
   const published = [];
   for (const spec of phase0Specs) {
-    let issue = existing.find(candidate => candidate.title === spec.title);
+    const existing = findExistingSpec(repositoryIssues(), spec.id);
+    let issue = existing && { number:existing.number, title:existing.title, url:existing.html_url };
     if (!issue) {
       const url = gh(['issue','create','--repo',config.repository,'--title',spec.title,'--body',renderSpecBody(spec),'--label',`${spec.contextLabel},kind:capability${spec.review === 'Required' ? ',human-required' : ''}`]);
       issue = { url, number:Number(url.split('/').at(-1)), title:spec.title };

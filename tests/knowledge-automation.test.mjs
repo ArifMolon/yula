@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { validateDoneEligibility } from '../scripts/validate-project-item.mjs';
+import { buildValidatedProjectItem, validateDoneEligibility } from '../scripts/validate-project-item.mjs';
 import { buildKnowledgeUpdate, writeKnowledgeUpdate } from '../scripts/request-knowledge-update.mjs';
 import { validateSpecCleanup } from '../scripts/validate-spec-cleanup.mjs';
 
@@ -20,6 +20,14 @@ test('Done issue produces a deterministic knowledge request and log entry', asyn
   }
 });
 
+test('Project delivery state overrides untrusted HandoffBrief status', async () => {
+  const handoff = { ...(await fixture('done-feature-issue')), status: 'Progress' };
+  const project = { items: [{ content: { number: 10 }, status: 'Done', phase: '0', spec: handoff.spec, 'bounded Context': 'Orchestration' }] };
+  const validated = buildValidatedProjectItem(handoff, project, 10);
+  assert.equal(validated.status, 'Done');
+  assert.deepEqual(validateDoneEligibility(validated), []);
+});
+
 test('write mode creates the request and appends the OKF log', async () => {
   const root = await mkdtemp(path.join(tmpdir(), 'yula-knowledge-'));
   const result = await writeKnowledgeUpdate(await fixture('done-feature-issue'), root);
@@ -27,6 +35,14 @@ test('write mode creates the request and appends the OKF log', async () => {
   const log = await readFile(path.join(root, 'my-docs/okf/log.md'), 'utf8');
   assert.equal(record.request_id, result.record.request_id);
   assert.ok(log.includes(result.record.request_id));
+});
+
+test('issue-close workflow reads Project state and gates knowledge auto-merge', async () => {
+  const workflow = await readFile('.github/workflows/issue-close-knowledge.yml', 'utf8');
+  for (const phrase of ['project item-list', 'validate-project-item.mjs', 'validate-operating-model.mjs', 'provenance', 'links', 'gh pr merge', 'failure-artifact']) {
+    assert.match(workflow, new RegExp(phrase));
+  }
+  assert.doesNotMatch(workflow, /start.*next issue/i);
 });
 
 for (const [name, message] of [
@@ -56,6 +72,7 @@ for (const [field, value] of [
   ['merged_to_main', false], ['final_acceptance', false], ['final_handoff', false],
   ['feature_branches', ['feature/1-x']], ['stale_worktrees', ['.worktrees/spec-x']],
   ['active_claims', ['concept-x']], ['pending_hitl', ['approval-x']],
+  ['stashes', ['stash@{0}']], ['artifacts', ['coverage']],
 ]) {
   test(`spec cleanup rejects ${field}`, () => {
     const state = { merged_to_main: true, final_acceptance: true, final_handoff: true, feature_branches: [], stale_worktrees: [], active_claims: [], pending_hitl: [], [field]: value };

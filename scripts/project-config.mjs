@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { boundedContexts, contextNames } from './domain-catalog.mjs';
 
 export const projectConfig = Object.freeze({
   owner: 'ArifMolon',
@@ -9,7 +10,7 @@ export const projectConfig = Object.freeze({
   fields: Object.freeze({
     Status: ['Todo', 'Progress', 'Review', 'Done'],
     Phase: ['0', '1', '2', '3', '4', '5', '6'],
-    'Bounded Context': ['Orchestration', 'Agent Studio', 'Tool Lab', 'Knowledge', 'Workspace', 'Model Gateway', 'Interaction', 'Approval & Security', 'Integration', 'Observability & Cost', 'Remote Access', 'Identity & Secrets'],
+    'Bounded Context': contextNames,
     Risk: ['R0', 'R1', 'R2', 'R3', 'R4'],
     Spec: { type: 'text' },
     'Human Review': ['Policy', 'Required'],
@@ -18,7 +19,7 @@ export const projectConfig = Object.freeze({
 });
 
 export const labelConfig = Object.freeze({
-  context: ['context:orchestration', 'context:agent-studio', 'context:tool-lab', 'context:knowledge', 'context:workspace', 'context:model-gateway', 'context:interaction', 'context:approval-security', 'context:integration', 'context:observability-cost', 'context:remote-access', 'context:identity-secrets'],
+  context: boundedContexts.map(context => `context:${context.slug}`),
   kind: ['kind:capability', 'kind:domain-discovery', 'kind:decision', 'kind:experiment', 'kind:defect', 'kind:lesson', 'kind:contract'],
   model: ['model:aggregate', 'model:domain-event', 'model:policy', 'model:value-object', 'model:published-language'],
   exception: ['blocked', 'security', 'human-required'],

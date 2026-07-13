@@ -2,12 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { projectConfig, labelConfig, buildDryRun, fieldDifferences } from '../scripts/project-config.mjs';
+import { contextNames as contexts } from '../scripts/domain-catalog.mjs';
 
-const contexts = [
-  'Orchestration', 'Agent Studio', 'Tool Lab', 'Knowledge', 'Workspace',
-  'Model Gateway', 'Interaction', 'Approval & Security', 'Integration',
-  'Observability & Cost', 'Remote Access', 'Identity & Secrets',
-];
 
 test('project configuration uses the approved domain vocabulary', () => {
   assert.equal(projectConfig.title, 'YULA Development');

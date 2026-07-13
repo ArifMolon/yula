@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
+import { contextSlugs as contexts } from '../scripts/domain-catalog.mjs';
 
 test('all exported reviews are resolved with provenance', async () => {
   const reviews = await readFile('my-docs/plan/plan-reviews.md', 'utf8');
@@ -27,12 +28,6 @@ test('canonical documentation lives under my-docs', async () => {
 
   await Promise.all(required.map(path => access(path)));
 });
-
-const contexts = [
-  'orchestration', 'agent-studio', 'tool-lab', 'knowledge', 'workspace',
-  'model-gateway', 'interaction', 'approval-security', 'integration',
-  'observability-cost', 'remote-access', 'identity-secrets',
-];
 
 test('operating model schemas expose the approved contracts', async () => {
   const expected = {
