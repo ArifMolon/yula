@@ -63,6 +63,6 @@ Never autonomously perform destructive or irreversible operations, publish exter
 
 ## Verification and cleanup
 
-Before review or completion, run focused tests plus the repository-wide checks appropriate to the change. At minimum run [operating-model verification](scripts/validate-operating-model.mjs), [Markdown-link verification](scripts/validate-markdown-links.mjs), and `git diff --check`; preserve the exact command output in the issue or HandoffBrief. DDD, provenance, Project-state, HITL, and cleanup gates are part of completion, not optional follow-up.
+Before review or completion, run focused tests plus the repository-wide checks appropriate to the change. At minimum run [operating-model and Markdown-link verification](scripts/validate-operating-model.mjs) and `git diff --check`; preserve the exact command output in the issue or HandoffBrief. DDD, provenance, Project-state, HITL, and cleanup gates are part of completion, not optional follow-up.
 
 Do not claim success without fresh evidence. Do not silently delete dirty or unmerged worktrees, branches, stashes, artifacts, pending knowledge claims, or pending HITL requests. Finish through `scripts/spec-worktree`, confirm all work is merged and durable state is recorded, then remove only the owning spec's safe-to-delete resources.

@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 test('CLAUDE.md delegates shared project instructions to AGENTS.md', async () => {
   const adapter = await readFile('CLAUDE.md', 'utf8');
@@ -18,14 +22,17 @@ test('AGENTS.md links every canonical operating-model artifact', async () => {
     ['HITL policy', 'my-docs/policies/hitl.md'],
     ['OKF index', 'my-docs/okf/index.md'],
     ['GitHub Project configuration', '.github/yula-project.json'],
-    ['operating-model verification', 'scripts/validate-operating-model.mjs'],
-    ['Markdown-link verification', 'scripts/validate-markdown-links.mjs'],
+    ['operating-model and Markdown-link verification', 'scripts/validate-operating-model.mjs'],
   ];
 
   for (const [name, artifact] of requiredArtifacts) {
     const destination = artifact.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const canonicalLink = new RegExp(`\\]\\(\\s*<?(?:\\./)?${destination}>?(?:#[^)\\s]+)?\\s*\\)`);
     assert.match(instructions, canonicalLink, `AGENTS.md links the canonical ${name}: ${artifact}`);
+    await assert.doesNotReject(
+      access(path.join(repositoryRoot, artifact)),
+      `canonical ${name} link target exists: ${artifact}`,
+    );
   }
 });
 
