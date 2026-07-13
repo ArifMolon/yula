@@ -70,7 +70,7 @@ No GitHub issue may be created until both exported plan reviews are applied to t
 
 ## Task 1: Record The Baseline And Resolve Dashboard Integration
 
-- [ ] **Step 1: Reconfirm the clean baseline and branch topology**
+- [x] **Step 1: Reconfirm the clean baseline and branch topology**
 
 Run:
 
@@ -83,11 +83,11 @@ git diff --name-status main..feature/interactive-plan-dashboard
 
 Expected: `main` is clean at `7ebd27d`; `.worktrees/interactive-plan-dashboard` is at `c138bc7`; the dashboard branch contains `okf/plan.html` and `scripts/verify-plan-html.mjs` and predates the local Matt skill commit.
 
-- [ ] **Step 2: Present the non-destructive integration choices**
+- [x] **Step 2: Present the non-destructive integration choices**
 
 Ask the user to select one of these outcomes: local merge into `main` (recommended because the dashboard and popup fix were accepted), keep the branch/worktree, push the branch, or discard it. Do not remove a branch or worktree without the explicit discard choice.
 
-- [ ] **Step 3: If local merge is selected, merge without deleting the worktree**
+- [x] **Step 3: If local merge is selected, merge without deleting the worktree**
 
 Run:
 
@@ -97,7 +97,7 @@ git merge --no-ff feature/interactive-plan-dashboard -m "merge: integrate intera
 
 Expected: merge succeeds; `okf/plan.html` and `scripts/verify-plan-html.mjs` exist; `.agents`, `.claude`, and `.codex` skill files remain present.
 
-- [ ] **Step 4: Verify the integrated dashboard and newer main-owned files**
+- [x] **Step 4: Verify the integrated dashboard and newer main-owned files**
 
 Run:
 
@@ -110,13 +110,13 @@ git status --short --branch
 
 Expected: dashboard verifier reports all checks passing; the skill file test exits zero; no whitespace errors exist.
 
-- [ ] **Step 5: If the branch is kept or pushed instead, record the decision**
+- [x] **Step 5: If the branch is kept or pushed instead, record the decision**
 
 Add a dated decision line under this task noting the selected outcome and branch commit. Subsequent migration steps must not claim `my-docs/plan/plan.html` exists unless the branch has been integrated.
 
 ## Task 2: Apply And Resolve The Exported Plan Reviews
 
-- [ ] **Step 1: Write a failing review-resolution test**
+- [x] **Step 1: Write a failing review-resolution test**
 
 Create `tests/operating-model.test.mjs` with:
 
@@ -134,13 +134,13 @@ test('all exported reviews are resolved with provenance', async () => {
 });
 ```
 
-- [ ] **Step 2: Run the test and verify red state**
+- [x] **Step 2: Run the test and verify red state**
 
 Run: `node --test tests/operating-model.test.mjs`
 
 Expected: FAIL because the two records still have `status: open` and no resolution metadata.
 
-- [ ] **Step 3: Revise the canonical DDD plan**
+- [x] **Step 3: Revise the canonical DDD plan**
 
 Modify `okf/YULA_DDD_Proje_Plani.md` so it explicitly states:
 
@@ -156,7 +156,7 @@ Modify `okf/YULA_DDD_Proje_Plani.md` so it explicitly states:
 
 Update the relevant Knowledge Context, knowledge architecture, Tool Lab, risks, and ADR seed sections rather than adding a disconnected appendix.
 
-- [ ] **Step 4: Mark both review records resolved while preserving their original text**
+- [x] **Step 4: Mark both review records resolved while preserving their original text**
 
 For each record in `docs/superpowers/plans/plan-reviews.md`, change `status` to `resolved` and append machine-readable fields:
 
@@ -168,7 +168,7 @@ resolved_by: coding-agent
 
 Use the actual completion timestamp instead of the example timestamp.
 
-- [ ] **Step 5: Run the test and inspect the semantic diff**
+- [x] **Step 5: Run the test and inspect the semantic diff**
 
 Run:
 
@@ -180,7 +180,7 @@ git diff --check
 
 Expected: PASS; the diff covers all four approved decisions and retains review IDs, targets, timestamps, and note bodies.
 
-- [ ] **Step 6: Commit the review resolution gate**
+- [x] **Step 6: Commit the review resolution gate**
 
 ```bash
 git add okf/YULA_DDD_Proje_Plani.md docs/superpowers/plans/plan-reviews.md tests/operating-model.test.mjs
@@ -189,7 +189,7 @@ git commit -m "docs: resolve canonical plan reviews"
 
 ## Task 3: Migrate Durable Documentation Into `my-docs`
 
-- [ ] **Step 1: Extend the failing test with canonical-layout assertions**
+- [x] **Step 1: Extend the failing test with canonical-layout assertions**
 
 Add to `tests/operating-model.test.mjs`:
 
@@ -208,13 +208,13 @@ test('canonical documentation lives under my-docs', async () => {
 });
 ```
 
-- [ ] **Step 2: Run the test and verify missing `my-docs` paths**
+- [x] **Step 2: Run the test and verify missing `my-docs` paths**
 
 Run: `node --test tests/operating-model.test.mjs`
 
 Expected: FAIL with `ENOENT` for `my-docs/plan/...`.
 
-- [ ] **Step 3: Move the approved artifacts with git history**
+- [x] **Step 3: Move the approved artifacts with git history**
 
 Use `git mv` for the files listed in the File Map. If the dashboard is integrated, also run:
 
@@ -224,7 +224,7 @@ git mv okf/plan.html my-docs/plan/plan.html
 
 Update source links inside the moved Markdown and `scripts/verify-plan-html.mjs` to use `my-docs/plan/YULA_DDD_Proje_Plani.md` and `my-docs/plan/plan.html`.
 
-- [ ] **Step 4: Create the OKF skeleton and local-artifact boundary**
+- [x] **Step 4: Create the OKF skeleton and local-artifact boundary**
 
 Create `my-docs/okf/index.md` with the `Todo -> Progress -> Review -> Prod` lifecycle, two-hour claim lease, stale-claim recovery, `KnowledgeWriter` serialization, OKF-as-canonical rule, and sqlite-vec-as-derived-index rule. Create `my-docs/okf/log.md` with a heading and append-only entry format. Add `.gitkeep` anchors for the directories in the File Map.
 
@@ -234,7 +234,7 @@ Append to `.gitignore`:
 my-docs/.local/
 ```
 
-- [ ] **Step 5: Run layout and dashboard verification**
+- [x] **Step 5: Run layout and dashboard verification**
 
 Run:
 
@@ -246,7 +246,7 @@ git diff --check
 
 Expected: PASS. If the dashboard was not integrated, omit its verifier and record that the derived HTML remains on its feature branch.
 
-- [ ] **Step 6: Commit the documentation migration**
+- [x] **Step 6: Commit the documentation migration**
 
 ```bash
 git add .gitignore my-docs scripts/verify-plan-html.mjs tests/operating-model.test.mjs
@@ -255,23 +255,23 @@ git commit -m "docs: establish canonical my-docs layout"
 
 ## Task 4: Add DDD, Handoff, Learning, HITL, And Voice Contracts
 
-- [ ] **Step 1: Add failing schema and policy tests**
+- [x] **Step 1: Add failing schema and policy tests**
 
 Extend `tests/operating-model.test.mjs` to assert that all four schema files parse as JSON, each declares `$schema` as `https://json-schema.org/draft/2020-12/schema`, each requires its identity and lifecycle fields, all twelve full context slugs have lesson directories, and policy documents contain the prohibited generic names, R3/R4 approval rules, voice confirmation rules, and main/worktree boundary rules.
 
-- [ ] **Step 2: Run the tests and verify red state**
+- [x] **Step 2: Run the tests and verify red state**
 
 Run: `node --test tests/operating-model.test.mjs`
 
 Expected: FAIL because schemas, templates, policies, ADR, and context lesson directories do not exist.
 
-- [ ] **Step 3: Create the DDD MUST policy and ADR**
+- [x] **Step 3: Create the DDD MUST policy and ADR**
 
 Define commands as intent, events in past tense, aggregate transitions by domain name, glossary-before-merge, Published Language boundaries, and merge-blocking rejection of `Manager`, `Helper`, `Utils`, `CommonService`, `process`, `updateData`, unrestricted `setStatus`, and numeric-only bounded-context identifiers.
 
 The ADR must record: one spec worktree, one active feature issue per spec, main-owned durable knowledge, serialized `KnowledgeWriter`, separate GitHub/OKF state machines, agent-managed OKF review, unified Review Inbox for genuine human decisions, and voice parity with typed commands.
 
-- [ ] **Step 4: Create JSON Schemas and matching Markdown templates**
+- [x] **Step 4: Create JSON Schemas and matching Markdown templates**
 
 Use these required domain fields:
 
@@ -284,15 +284,15 @@ KnowledgeUpdateRequested: request_id, issue, spec, bounded_context, capability, 
 
 Constrain `bounded_context` to the twelve full slugs and constrain lifecycle values to the approved state machines.
 
-- [ ] **Step 5: Create HITL and voice policies**
+- [x] **Step 5: Create HITL and voice policies**
 
 Define ApprovalRequest presentation fields, decisions (`Approve`, `Request Changes`, `Reject`, `Approve Once`, `Approve Scope`, `Cancel Execution`), mandatory R3/R4 human review, pending-HITL Done block, second voice confirmation for R3, UI/biometric confirmation for R4, low-confidence rejection, no bulk R3/R4 approval, and transcript/confidence/audit recording.
 
-- [ ] **Step 6: Implement `scripts/validate-operating-model.mjs`**
+- [x] **Step 6: Implement `scripts/validate-operating-model.mjs`**
 
 The validator must use Node built-ins only, parse every JSON schema, verify required policy phrases and context slugs, reject `BC-<number>` as an operational context value in fixtures/templates, ensure both review records are resolved, and verify all relative Markdown links resolve.
 
-- [ ] **Step 7: Run all contract checks and commit**
+- [x] **Step 7: Run all contract checks and commit**
 
 Run:
 
@@ -311,21 +311,21 @@ git commit -m "feat: codify YULA operating model contracts"
 
 ## Task 5: Configure The GitHub Project And Domain Labels
 
-- [ ] **Step 1: Write a failing configuration contract test**
+- [x] **Step 1: Write a failing configuration contract test**
 
 Create `tests/project-config.test.mjs` that imports `scripts/project-config.mjs` and asserts the project title, four Status options, Phase 0–6, all twelve full Bounded Context names, Risk R0–R4, Human Review values, Size XS/S/M, seven kind labels, three optional model labels, and only `blocked`, `security`, `human-required` as delivery exception labels.
 
-- [ ] **Step 2: Run the test and verify red state**
+- [x] **Step 2: Run the test and verify red state**
 
 Run: `node --test tests/project-config.test.mjs`
 
 Expected: FAIL because `scripts/project-config.mjs` does not exist.
 
-- [ ] **Step 3: Implement declarative, idempotent project configuration**
+- [x] **Step 3: Implement declarative, idempotent project configuration**
 
 Export immutable configuration arrays and a command generator. Commands must create or locate the user-level `YULA Development` Project under `ArifMolon`, link only `ArifMolon/yula`, create missing fields/options, and create/update labels without duplicating Project field concepts as labels.
 
-- [ ] **Step 4: Run tests before external mutation**
+- [x] **Step 4: Run tests before external mutation**
 
 Run:
 
@@ -336,17 +336,17 @@ node scripts/project-config.mjs --dry-run
 
 Expected: PASS; dry-run lists intended project, fields, options, and labels and creates no remote state.
 
-- [ ] **Step 5: Apply the configuration with authenticated `gh`**
+- [x] **Step 5: Apply the configuration with authenticated `gh`**
 
 Run the script's `--apply` mode only after `gh auth status` succeeds. Capture the Project number/ID and field IDs into a generated configuration file that contains identifiers but no tokens or secrets.
 
-- [ ] **Step 6: Verify idempotency and remote state**
+- [x] **Step 6: Verify idempotency and remote state**
 
 Run `--apply` a second time and then `--verify`.
 
 Expected: second apply creates nothing; verification confirms one linked repository, exact field options, and exact domain label vocabulary.
 
-- [ ] **Step 7: Commit configuration code and non-secret identifiers**
+- [x] **Step 7: Commit configuration code and non-secret identifiers**
 
 ```bash
 git add scripts/project-config.mjs tests/project-config.test.mjs .github
@@ -355,21 +355,21 @@ git commit -m "feat: configure YULA delivery project"
 
 ## Task 6: Add Issue, Pull Request, And Handoff Intake Templates
 
-- [ ] **Step 1: Add failing template assertions**
+- [x] **Step 1: Add failing template assertions**
 
 Extend `tests/project-config.test.mjs` to require the Spec Issue sections: bounded context, outcome, Ubiquitous Language, invariants, Published Language, dependencies, HITL policy, exit criteria, and child issues. Require tracer-bullet coverage of domain, application, ports, adapters, UI, tests, and evaluation where applicable. Require PR confirmation of glossary, DDD boundary, fresh verification, HandoffBrief, claims, and HITL state.
 
-- [ ] **Step 2: Run tests and confirm the templates are missing**
+- [x] **Step 2: Run tests and confirm the templates are missing**
 
 Run: `node --test tests/project-config.test.mjs`
 
 Expected: FAIL on missing `.github/ISSUE_TEMPLATE/*.yml`.
 
-- [ ] **Step 3: Create typed GitHub form templates**
+- [x] **Step 3: Create typed GitHub form templates**
 
 Use dropdowns for the twelve full bounded-context names, RiskLevel, Human Review, and Size. Do not expose numeric-only context choices. Include issue-form validation for required domain outcomes and invariants; leave operational state transitions to Project/API automation rather than editable Markdown status fields.
 
-- [ ] **Step 4: Create the PR template and verify**
+- [x] **Step 4: Create the PR template and verify**
 
 Run:
 
@@ -381,7 +381,7 @@ git diff --check
 
 Expected: PASS with no numeric-only context identifiers in issue form values.
 
-- [ ] **Step 5: Commit the intake contracts**
+- [x] **Step 5: Commit the intake contracts**
 
 ```bash
 git add .github/ISSUE_TEMPLATE .github/PULL_REQUEST_TEMPLATE.md tests/project-config.test.mjs
@@ -390,25 +390,25 @@ git commit -m "feat: add domain delivery templates"
 
 ## Task 7: Add Issue-Close Knowledge Automation
 
-- [ ] **Step 1: Write failing deterministic payload tests**
+- [x] **Step 1: Write failing deterministic payload tests**
 
 Create `tests/knowledge-automation.test.mjs` with a fixture for a Done feature issue and assertions that `request-knowledge-update.mjs` produces one `KnowledgeUpdateRequested` record and one append-only OKF log entry containing issue, PR, spec, full context, capability, events, lessons, and verification. Add invalid fixtures for missing HandoffBrief, unresolved claim, pending HITL, and non-Done Project status.
 
-- [ ] **Step 2: Run tests and verify red state**
+- [x] **Step 2: Run tests and verify red state**
 
 Run: `node --test tests/knowledge-automation.test.mjs`
 
 Expected: FAIL because the validator and payload builder do not exist.
 
-- [ ] **Step 3: Implement pure validation and payload generation**
+- [x] **Step 3: Implement pure validation and payload generation**
 
 `validate-project-item.mjs` must return structured errors and never mutate state. `request-knowledge-update.mjs` must derive deterministic filenames and Markdown from validated event input; it must never invent lessons, modify plans/ADRs, activate prompts, choose the next issue, or represent agent action as human approval.
 
-- [ ] **Step 4: Create the knowledge-only GitHub workflow**
+- [x] **Step 4: Create the knowledge-only GitHub workflow**
 
 The workflow must trigger on feature issue closure, read Project fields, validate the latest HandoffBrief, create a `knowledge/issue-<number>` branch, append the OKF log entry, add the request record, open a documentation-only PR, run schema/provenance/link checks, and auto-merge only after those checks pass. Failure must emit a Review Inbox integration event or a clearly structured artifact until that adapter exists.
 
-- [ ] **Step 5: Test legal and illegal transitions**
+- [x] **Step 5: Test legal and illegal transitions**
 
 Run:
 
@@ -420,7 +420,7 @@ node scripts/validate-operating-model.mjs
 
 Expected: valid fixture passes; each invalid fixture fails for its specific invariant; dry-run produces no branch or file mutation.
 
-- [ ] **Step 6: Commit the automation**
+- [x] **Step 6: Commit the automation**
 
 ```bash
 git add .github/workflows/issue-close-knowledge.yml scripts/validate-project-item.mjs scripts/request-knowledge-update.mjs tests
@@ -429,21 +429,21 @@ git commit -m "feat: request knowledge updates on issue close"
 
 ## Task 8: Add Spec-Scoped Worktree Bootstrap And Cleanup
 
-- [ ] **Step 1: Write failing worktree-policy tests**
+- [x] **Step 1: Write failing worktree-policy tests**
 
 Create `tests/worktree-policy.test.mjs` for: valid `spec/<name>` creation at `.worktrees/spec-<name>`, one active `feature/<issue>-<name>` branch, shared pnpm store at `my-docs/.local/pnpm-store`, forbidden main-owned paths in code worktrees, dirty-worktree cleanup rejection, unmerged-branch rejection, stale claim/pending HITL rejection, and safe cleanup approval.
 
-- [ ] **Step 2: Run tests and verify red state**
+- [x] **Step 2: Run tests and verify red state**
 
 Run: `node --test tests/worktree-policy.test.mjs`
 
 Expected: FAIL because `scripts/worktree-policy.mjs` does not exist.
 
-- [ ] **Step 3: Implement the pure policy module**
+- [x] **Step 3: Implement the pure policy module**
 
 Return planned actions or named blocking reasons. Never silently delete dirty/unmerged work, stashes, claims, artifacts, or pending Review Inbox items. Enforce one worktree per spec rather than one per issue and one active feature branch in that worktree.
 
-- [ ] **Step 4: Implement `scripts/spec-worktree` commands**
+- [x] **Step 4: Implement `scripts/spec-worktree` commands**
 
 Support:
 
@@ -457,7 +457,7 @@ scripts/spec-worktree cleanup <spec-name>
 
 Bootstrap must create the spec branch/worktree, configure the shared pnpm content-addressed store, and exclude main-owned `my-docs`, handoffs, plans, generated artifacts, and OKF content from the code worktree without sharing mutable `node_modules`.
 
-- [ ] **Step 5: Exercise behavior in a disposable repository fixture**
+- [x] **Step 5: Exercise behavior in a disposable repository fixture**
 
 Run:
 
@@ -469,7 +469,7 @@ scripts/spec-worktree --dry-run cleanup phase-0-foundation
 
 Expected: policy tests pass; dry runs print exact git actions but do not modify the current repository.
 
-- [ ] **Step 6: Commit worktree tooling**
+- [x] **Step 6: Commit worktree tooling**
 
 ```bash
 git add scripts/spec-worktree scripts/worktree-policy.mjs tests/worktree-policy.test.mjs my-docs/policies/worktree-boundaries.md
@@ -478,19 +478,19 @@ git commit -m "feat: add spec-scoped worktree lifecycle"
 
 ## Task 9: Add Spec Completion Validation And Continuous Checks
 
-- [ ] **Step 1: Add failing completion fixtures**
+- [x] **Step 1: Add failing completion fixtures**
 
 Extend `tests/knowledge-automation.test.mjs` with valid and invalid spec completion fixtures covering main merge, final acceptance, final HandoffBrief, remaining feature branches, stale worktree, unresolved OKF claim, and pending HITL request.
 
-- [ ] **Step 2: Implement `validate-spec-cleanup.mjs`**
+- [x] **Step 2: Implement `validate-spec-cleanup.mjs`**
 
 The validator must produce a machine-readable report and exit non-zero for any unsafe cleanup condition. It may recommend `git worktree prune` only after the physical worktree and branches are safely removed; it must never force-delete them.
 
-- [ ] **Step 3: Add CI workflows**
+- [x] **Step 3: Add CI workflows**
 
 `operating-model-checks.yml` runs Node tests, schema/policy/link validation, numeric-context rejection, and `git diff --check` on PRs. `spec-cleanup.yml` runs only when spec completion is requested and blocks Done until every cleanup invariant passes.
 
-- [ ] **Step 4: Run the complete local suite**
+- [x] **Step 4: Run the complete local suite**
 
 Run:
 
@@ -503,7 +503,7 @@ git diff --check
 
 Expected: all tests pass, remote configuration matches, and no whitespace errors exist.
 
-- [ ] **Step 5: Commit continuous enforcement**
+- [x] **Step 5: Commit continuous enforcement**
 
 ```bash
 git add .github/workflows/operating-model-checks.yml .github/workflows/spec-cleanup.yml scripts/validate-spec-cleanup.mjs tests
@@ -512,7 +512,7 @@ git commit -m "feat: enforce spec completion invariants"
 
 ## Task 10: Create Only Phase 0 Spec Issues
 
-- [ ] **Step 1: Verify every prerequisite gate**
+- [x] **Step 1: Verify every prerequisite gate**
 
 Run:
 
@@ -525,23 +525,23 @@ git status --short --branch
 
 Expected: all checks pass; both plan reviews are resolved; Project fields and labels exist; no Phase 1–6 creation command is queued.
 
-- [ ] **Step 2: Derive Phase 0 Spec Issue drafts from the canonical plan**
+- [x] **Step 2: Derive Phase 0 Spec Issue drafts from the canonical plan**
 
 Each draft must represent one coherent domain capability and contain the owning full bounded-context name, outcome, Ubiquitous Language, invariants, Published Language interactions, dependencies, HITL policy, exit criteria, and an initially empty child-issue list. Use `matt-to-tickets` only for this bounded Phase 0 scope.
 
-- [ ] **Step 3: Review the draft set against progressive-rollout constraints**
+- [x] **Step 3: Review the draft set against progressive-rollout constraints**
 
 Reject any draft that is a generic technical layer, exceeds Size M, belongs to Phase 1–6, duplicates another spec outcome, uses `BC-<number>` as its working name, or already contains tracer-bullet child issues.
 
-- [ ] **Step 4: Publish Phase 0 Spec Issues and add them to the Project**
+- [x] **Step 4: Publish Phase 0 Spec Issues and add them to the Project**
 
 Create only the approved Phase 0 Spec Issues with `Status=Todo`, `Phase=0`, full `Bounded Context`, Risk, Spec identifier, Human Review, and Size. Do not create child issues and do not move a spec to Progress.
 
-- [ ] **Step 5: Verify remote issue scope**
+- [x] **Step 5: Verify remote issue scope**
 
 Query the Project and repository issues. Expected: every newly created issue is Phase 0 and a Spec Issue; there are zero Phase 1–6 issues and zero tracer-bullet child issues.
 
-- [ ] **Step 6: Commit any generated non-operational catalog record**
+- [x] **Step 6: Commit any generated non-operational catalog record**
 
 If the Project IDs or Phase 0 spec identifiers are stored locally, commit only non-secret identifiers and links:
 
@@ -552,7 +552,7 @@ git commit -m "docs: record Phase 0 specification backlog"
 
 ## Task 11: Select The First Spec And Stop At The Child-Issue Gate
 
-- [ ] **Step 1: Present the Phase 0 Spec Issues to the user**
+- [x] **Step 1: Present the Phase 0 Spec Issues to the user**
 
 Summarize outcome, bounded context, dependencies, Risk, Human Review, and Size for each spec. Recommend a first spec based on dependency order and tracer-bullet learning value, but do not select it automatically.
 
@@ -566,14 +566,14 @@ Do not create child issues in this task. The next session uses `matt-to-tickets`
 
 ## Final Verification Checklist
 
-- [ ] `node --test tests/*.test.mjs` passes.
-- [ ] `node scripts/validate-operating-model.mjs` reports zero errors.
-- [ ] `node scripts/project-config.mjs --verify` matches the remote Project and labels.
-- [ ] `node scripts/verify-plan-html.mjs` passes if the dashboard was integrated.
-- [ ] `git diff --check` reports no whitespace errors.
-- [ ] Both exported reviews are resolved with provenance and the canonical plan contains all approved revisions.
+- [x] `node --test tests/*.test.mjs` passes.
+- [x] `node scripts/validate-operating-model.mjs` reports zero errors.
+- [x] `node scripts/project-config.mjs --verify` matches the remote Project and labels.
+- [x] `node scripts/verify-plan-html.mjs` passes if the dashboard was integrated.
+- [x] `git diff --check` reports no whitespace errors.
+- [x] Both exported reviews are resolved with provenance and the canonical plan contains all approved revisions.
 - [ ] `my-docs/.local/` is ignored; durable OKF, plans, handoffs, and generated artifacts are absent from code worktrees.
-- [ ] DDD generic names and numeric-only context identifiers are rejected by validation.
-- [ ] R3/R4 and voice confirmation policies match the approved operating model.
-- [ ] No GitHub Action starts the next issue, invents lessons, impersonates approval, or force-deletes worktrees.
-- [ ] GitHub contains only Phase 0 Spec Issues; child issue count remains zero until the next user-approved session.
+- [x] DDD generic names and numeric-only context identifiers are rejected by validation.
+- [x] R3/R4 and voice confirmation policies match the approved operating model.
+- [x] No GitHub Action starts the next issue, invents lessons, impersonates approval, or force-deletes worktrees.
+- [x] GitHub contains only Phase 0 Spec Issues; child issue count remains zero until the next user-approved session.
