@@ -1,4 +1,4 @@
-import { readFile, access } from 'node:fs/promises';
+import { readFile, access, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -9,6 +9,46 @@ const templateFiles = ['handoff-brief.md', 'failure-observation.md', 'lesson.md'
 
 async function text(relativePath) {
   return readFile(path.join(root, relativePath), 'utf8');
+}
+
+async function filesUnder(directory, suffix) {
+  const found = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) found.push(...await filesUnder(target, suffix));
+    else if (entry.name.endsWith(suffix)) found.push(target);
+  }
+  return found;
+}
+
+export async function validateMarkdownLinks(files) {
+  const errors = [];
+  for (const file of files) {
+    const content = await readFile(file, 'utf8');
+    for (const match of content.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
+      let target = match[1].trim().replace(/^<|>$/g, '').split('#')[0];
+      if (!target || /^(https?:|mailto:)/.test(target)) continue;
+      try { await access(path.resolve(path.dirname(file), target)); }
+      catch { errors.push(`${file}: missing link target ${target}`); }
+    }
+  }
+  return errors;
+}
+
+async function validateKnowledgeRequests() {
+  const directory = path.join(root, 'my-docs/okf/requests');
+  let files = [];
+  try { files = await filesUnder(directory, '.json'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const errors = [];
+  const required = ['request_id', 'issue', 'spec', 'bounded_context', 'capability', 'pull_request', 'events', 'lessons', 'verification', 'requested_at'];
+  for (const file of files) {
+    try {
+      const request = JSON.parse(await readFile(file, 'utf8'));
+      for (const field of required) if (request[field] == null) errors.push(`${file}: missing provenance field ${field}`);
+      if (!Array.isArray(request.verification) || request.verification.length === 0) errors.push(`${file}: verification provenance is empty`);
+    } catch (error) { errors.push(`${file}: ${error.message}`); }
+  }
+  return errors;
 }
 
 export async function validateOperatingModel() {
@@ -46,6 +86,9 @@ export async function validateOperatingModel() {
       errors.push(`${target}: missing`);
     }
   }
+
+  errors.push(...await validateMarkdownLinks(await filesUnder(path.join(root, 'my-docs'), '.md')));
+  errors.push(...await validateKnowledgeRequests());
 
   return errors;
 }

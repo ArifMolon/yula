@@ -9,7 +9,7 @@ permissions:
   actions: read
 jobs:
   request:
-    if: contains(github.event.issue.labels.*.name, 'kind:capability')
+    if: contains(github.event.issue.labels.*.name, 'kind:capability') && !startsWith(github.event.issue.title, '[Spec]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
         run: node scripts/validate-operating-model.mjs
       - name: Validate Project fields and latest HandoffBrief
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.YULA_PROJECT_TOKEN }}
         run: |
           handoff="my-docs/okf/handoffs/issue-${{ github.event.issue.number }}.json"
           test -f "$handoff"
@@ -38,7 +38,7 @@ jobs:
           git push origin "$branch"
           pr_url=$(gh pr create --title "Knowledge update for #${{ github.event.issue.number }}" --body "Generated from validated issue-close evidence. No lessons, plans, ADRs, prompts, or approvals are invented." --base main --head "$branch")
           node scripts/validate-operating-model.mjs
-          test -s my-docs/okf/log.md # provenance and links are validated by the operating-model gate
+          test -s my-docs/okf/log.md # schema, provenance, and links are validated by the operating-model gate
           gh pr merge "$pr_url" --auto --squash
       - name: Emit structured failure-artifact for Review Inbox ingestion
         if: failure()

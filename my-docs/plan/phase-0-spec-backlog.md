@@ -1,7 +1,7 @@
 # Phase 0 Spec Backlog
 
-**Project:** [YULA Development](https://github.com/users/ArifMolon/projects/5)  
-**Published:** 2026-07-13  
+**Project:** [YULA Development](https://github.com/users/ArifMolon/projects/5)
+**Published:** 2026-07-13
 **Boundary:** Only Phase 0 Spec Issues exist. Child tracer-bullet issues remain intentionally absent until the user selects the first spec.
 
 | Order | Spec | Bounded Context | Risk | Review | Size | Dependencies |

@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { access, readFile } from 'node:fs/promises';
+import { access, mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { contextSlugs as contexts } from '../scripts/domain-catalog.mjs';
 
 test('all exported reviews are resolved with provenance', async () => {
@@ -70,4 +72,12 @@ test('policies codify DDD, HITL, voice, and worktree boundaries', async () => {
 test('operating model validator reports no contract errors', async () => {
   const { validateOperatingModel } = await import('../scripts/validate-operating-model.mjs');
   assert.deepEqual(await validateOperatingModel(), []);
+});
+
+test('relative Markdown links must resolve', async () => {
+  const { validateMarkdownLinks } = await import('../scripts/validate-operating-model.mjs');
+  const directory = await mkdtemp(path.join(tmpdir(), 'yula-links-'));
+  const markdown = path.join(directory, 'source.md');
+  await writeFile(markdown, '[missing](./missing.md)\n');
+  assert.deepEqual(await validateMarkdownLinks([markdown]), [`${markdown}: missing link target ./missing.md`]);
 });
