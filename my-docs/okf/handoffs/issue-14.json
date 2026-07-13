@@ -39,6 +39,7 @@
     "The initial user promotion Command authorizes validated curation and persistence without a second preview confirmation; the persisted Concept is shown to the user and remains deletable.",
     "Exact content-hash duplicates are idempotent and return the existing Concept; meaningfully changed re-ingestions create a new Concept version and publish ConceptSuperseded without overwriting history.",
     "Canonical Concept persistence remains successful when a derived index refresh fails; index state becomes pending or degraded, the user sees partial availability, and safe idempotent reindexing is scheduled.",
+    "Promotion consumes the existing immutable evaluation artifact snapshot and provenance without re-fetching the remote video; any new source acquisition is a separate ingestion or evaluation run.",
     "No product implementation, spec-to-main merge, push, external ingestion, credential use, or next-issue selection is authorized."
   ],
   "implementation_state": "Issue #14 is open and its GitHub Project status is Progress with Phase 0, Orchestration, R1, SPEC-P0-domain-discovery, Human Review Required, and Size S. The clean spec worktree is active on feature/14-validate-knowledge-ingestion-domain-flow. No Event Storming record or product code has been created, and no external source has been ingested.",
@@ -65,10 +66,10 @@
     "Write and obtain explicit product-owner acceptance of the canonical issue #14 record before Review or completion.",
     "Do not select or configure issue #15 during issue #14."
   ],
-  "next_action": "Ask the product owner whether promotion consumes the existing immutable evaluation artifact or re-fetches the remote video source.",
+  "next_action": "Present the compared knowledge-ingestion approaches and obtain product-owner approval for the recommended design foundation.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-13-issue-14-domain-discovery",
-  "updated_at": "2026-07-13T18:59:57Z"
+  "updated_at": "2026-07-13T19:00:43Z"
 }
