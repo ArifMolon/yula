@@ -37,6 +37,19 @@ Always use the full bounded-context name in work, tests, issues, and Project dat
 11. Remote Access
 12. Identity & Secrets
 
+## Visual decision support
+
+Visual Companion is user-controlled and **off by default** to protect token budget. The effective repository-local preference lives at ignored `my-docs/.local/visual-mode.json`; missing, unreadable, or invalid state resolves to `off` without creating a file. Read it with `node scripts/visual-mode.mjs status`. Only the explicit `visual-on` and `visual-off` skills may change it.
+
+- When mode is `off`, do not start or update a companion server, write visual screens, read companion events, or load a client-specific visual guide.
+- When mode is `on`, use an available visual companion for technical decisions whose relationships are materially easier to understand visually: Context Map or Published Language boundaries, flows with at least three components, state/sequence changes, dependencies, hierarchies, layouts, and side-by-side technical trade-offs.
+- Keep terminology questions, simple requirements, and one-step choices in the terminal. If an active companion exists, show its waiting screen while terminal discussion continues.
+- At every visual choice, state that a click is recorded but does not start a new agent turn and ask the user to repeat the decision in the terminal. Terminal feedback is primary if signals differ.
+- At every visual step, provide the local URL and a short screen summary so the user can orient without relying on the browser alone.
+- On the next user-triggered turn, read companion events and reconcile them with the terminal response; if they conflict, the terminal response wins.
+- A visual click is never product-owner acceptance, a HITL decision, an ApprovalRequest decision, or canonical evidence. Record required decisions through the normal issue, HandoffBrief, and canonical-artifact workflow.
+- If mode is `on` but no visual capability is available, state the limitation and use the smallest useful in-message diagram, flow, state view, or comparison.
+
 ## Delivery and worktree workflow
 
 A Spec Issue defines a coherent domain capability and owns ordered tracer-bullet issues. Each tracer bullet is a thin end-to-end slice with explicit blocking edges; finish and verify the active slice before selecting another.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual Off"
+  short_description: "Disable Visual Companion for this YULA repository"
+  default_prompt: "Use $visual-off to disable Visual Companion in this YULA repository."

@@ -2,6 +2,16 @@
 
 Claude Code **MUST read and obey the repository root `AGENTS.md` ([canonical instructions](AGENTS.md)) before acting**. The rules below are Claude-specific additions and do not override that canonical contract.
 
+# Visual Companion adapter
+
+Before any visual brainstorming or technical-decision work, run `node scripts/visual-mode.mjs status` from the repository root.
+
+- If mode is `off`, do not read `visual-companion.md`, start or update its server, write screens, or read events. Continue in the terminal.
+- If mode is `on` and the canonical `AGENTS.md` visual threshold is met, load the current available `visual-companion.md` guide and follow it. Enabling mode alone does not start a companion server.
+- Use a waiting screen when an active companion exists but the current question is textual.
+- At every visual step, repeat the URL and screen summary. Explicitly say that clicks are recorded but do not start a new agent turn, request a terminal response, and read events only on that next user-triggered turn.
+- Keep terminal feedback and canonical YULA records authoritative; never infer acceptance or HITL approval from a visual interaction.
+
 # context-mode — MANDATORY routing rules
 
 You have context-mode MCP tools available. These rules are NOT optional — they protect your context window from flooding. A single unrouted command can dump 56 KB into context and waste the entire session.

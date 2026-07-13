@@ -1,7 +1,7 @@
 # Visual Decision Support Design
 
 **Date:** 2026-07-14
-**Status:** Conversational design approved; written-record review pending
+**Status:** Approved for implementation
 **Scope:** Repository agent instructions for Visual Companion use during technical design
 
 ## Purpose
@@ -21,16 +21,29 @@ During issue #15 brainstorming, the product owner selected evidence-bounded Cont
 - The full rule is not duplicated across both files.
 - No Codex-specific absolute user path is persisted in repository instructions.
 
-### When visual support is required
+### User-controlled visual mode
 
-An agent must offer and, after user consent, use an available visual companion during brainstorming, domain modeling, or technical design when a visual materially improves understanding. This includes:
+Visual support is governed by a YULA-local preference:
+
+- `/visual-on` enables Visual Companion for qualifying decisions.
+- `/visual-off` disables Visual Companion and prevents new companion servers, screens, or event reads.
+- The preference persists across YULA sessions but is local, ignored by Git, and does not affect other repositories.
+- The state lives at `my-docs/.local/visual-mode.json` and is managed only through the repository `scripts/visual-mode.mjs` command.
+- Missing, unreadable, or invalid state is treated as `off`. The default is therefore token-safe.
+- `status` reads the effective state without creating or changing the file.
+
+The repository exposes `visual-on` and `visual-off` as project skills under `.agents/skills/` and mirrors them into `.claude/skills/` using the repository's existing symlink convention. Each skill is concise and delegates state mutation to the shared script.
+
+### When enabled visual support is required
+
+When visual mode is `on`, an agent must use an available visual companion during brainstorming, domain modeling, or technical design when a visual materially improves understanding. This includes:
 
 - Context Map, bounded-context ownership, or Published Language decisions;
 - architecture or data/event flows with at least three components;
 - state machines, timelines, dependencies, hierarchies, or layouts;
 - comparison of two or more technical approaches whose trade-offs are easier to understand side by side.
 
-Purely textual requirements, terminology questions, and simple one-step choices remain in the terminal. When the conversation returns to text, the companion displays a waiting screen so stale options do not imply an active decision.
+Purely textual requirements, terminology questions, and simple one-step choices remain in the terminal. When the conversation returns to text, the companion displays a waiting screen so stale options do not imply an active decision. When visual mode is `off`, all questions remain in the terminal and no companion lifecycle work occurs.
 
 ### Interaction contract
 
@@ -54,6 +67,7 @@ Each client uses its available equivalent visual capability and current guide. I
 
 Add a `Visual decision support` section that defines:
 
+- the default-off, user-controlled mode and local state contract;
 - the mandatory trigger conditions;
 - the terminal-versus-visual routing rule;
 - the interaction and authority boundaries;
@@ -64,14 +78,26 @@ Add a `Visual decision support` section that defines:
 Add a `Visual Companion adapter` section that requires Claude Code to:
 
 - follow the canonical `AGENTS.md` rule first;
+- resolve the effective mode through `node scripts/visual-mode.mjs status` before starting companion work;
 - load the current available `visual-companion.md` guide;
 - show visual screens for qualifying decisions and waiting screens for textual steps;
 - repeat the URL and screen summary at every visual step;
 - disclose the no-push event limitation and read events on the next user-triggered turn.
 
+### Skills and deterministic state command
+
+Create:
+
+- `scripts/visual-mode.mjs`: `on`, `off`, and `status` commands with atomic local-state writes and fail-closed reads;
+- `tests/visual-mode.test.mjs`: focused state transition, default, invalid-state, and repository-scope tests;
+- `.agents/skills/visual-on/SKILL.md`: explicit user-triggered enable workflow;
+- `.agents/skills/visual-off/SKILL.md`: explicit user-triggered disable workflow, including stopping an active companion session through the available guide when one exists;
+- `.claude/skills/visual-on` and `.claude/skills/visual-off`: symlinks to the canonical project skills.
+
 ## Non-goals
 
 - Making every question visual.
+- Starting or continuing Visual Companion while effective mode is `off`.
 - Treating browser interaction as approval or canonical knowledge.
 - Replacing terminal explanations or durable Markdown artifacts.
 - Persisting tool-specific absolute paths in cross-tool instructions.
@@ -84,11 +110,15 @@ The instruction change must pass:
 1. `node scripts/validate-operating-model.mjs`
 2. `node --test tests/*.test.mjs`
 3. `git diff --check`
-4. A focused inspection confirming the cross-tool rule exists once in `AGENTS.md`, Claude-specific behavior remains in `CLAUDE.md`, and neither file implies that a visual click is approval.
+4. `node scripts/visual-mode.mjs status` in a temporary local-state fixture.
+5. `quick_validate.py` for each skill folder.
+6. Focused inspection confirming the cross-tool rule exists once in `AGENTS.md`, Claude-specific behavior remains in `CLAUDE.md`, visual mode defaults to `off`, and neither file implies that a visual click is approval.
 
 ## Acceptance criteria
 
-- Technical decisions with material spatial or comparative structure trigger visual support after user consent.
+- Missing or invalid local state resolves to `off` without writing a file.
+- `/visual-on` persists `on`; `/visual-off` persists `off` and prevents further companion lifecycle work.
+- Enabled technical decisions with material spatial or comparative structure trigger visual support.
 - Text-only questions use the terminal and clear stale companion content with a waiting screen.
 - Users are told that clicks do not start agent turns and must be repeated in the terminal.
 - Terminal feedback and canonical artifacts remain authoritative.
@@ -97,4 +127,4 @@ The instruction change must pass:
 
 ## Approval record
 
-The product owner selected the canonical-rule-plus-thin-adapter approach, approved the behavior design, and approved the file-placement and verification design in the Visual Companion and terminal conversation on 2026-07-14. Written-record acceptance remains pending until this file is presented for review.
+The product owner selected the canonical-rule-plus-thin-adapter approach, approved the behavior design and file placement, required explicit `/visual-on` and `/visual-off` control, selected repository-scoped persistent local state, selected default `off`, and directed implementation to finish without further design questions on 2026-07-14.

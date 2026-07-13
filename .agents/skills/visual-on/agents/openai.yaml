@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual On"
+  short_description: "Enable Visual Companion for YULA technical decisions"
+  default_prompt: "Use $visual-on to enable Visual Companion for qualifying YULA technical decisions."
