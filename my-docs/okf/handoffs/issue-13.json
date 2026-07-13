@@ -3,7 +3,7 @@
   "spec": "SPEC-P0-domain-discovery",
   "bounded_context": "orchestration",
   "kind": "domain-discovery",
-  "status": "Review",
+  "status": "Done",
   "branch": "spec/domain-discovery",
   "spec_worktree": ".worktrees/spec-domain-discovery",
   "objective": "Create the canonical end-to-end Event Storming record for tool onboarding, from discovery of a Tool candidate through isolated evaluation and ToolGrade publication to eligibility for use in an Execution.",
@@ -39,7 +39,7 @@
     "The product owner explicitly accepted the written canonical Event Storming record on 2026-07-13 without requesting changes.",
     "No implementation, spec-to-main merge, push, or next-issue selection is authorized."
   ],
-  "implementation_state": "Issue #13 remains open and its GitHub Project status is Review. The accepted Event Storming record is committed on local main at 4c08593 and its accepted HandoffBrief at 7aee435. Review evidence was recorded with no pending HITL, and scripts/spec-worktree finish-feature 13 returned the clean spec worktree to spec/domain-discovery and deleted feature/13-validate-tool-onboarding-domain-flow. No product code, real Tool evaluation, ToolGrade transition, push, or spec-to-main merge occurred.",
+  "implementation_state": "Issue #13 is closed as completed and its GitHub Project status is Done. The accepted Event Storming record is committed on local main at 4c08593. Review evidence was recorded with no pending HITL, and scripts/spec-worktree finish-feature 13 returned the clean spec worktree to spec/domain-discovery and deleted feature/13-validate-tool-onboarding-domain-flow. The owning spec remains open and unmerged. No product code, real Tool evaluation, ToolGrade transition, push, or spec-to-main merge occurred.",
   "changed_code": [
     "my-docs/okf/event-storming/issue-13-tool-onboarding-domain-flow.md",
     "my-docs/okf/handoffs/issue-13.json"
@@ -124,19 +124,28 @@
       "command": "scripts/spec-worktree finish-feature 13 from .worktrees/spec-domain-discovery",
       "result": "PASS: switched to spec/domain-discovery; branch already up to date; deleted feature/13-validate-tool-onboarding-domain-flow at 95e8d30",
       "observed_at": "2026-07-13T18:47:52Z"
+    },
+    {
+      "command": "Final node --test tests/*.test.mjs in main and .worktrees/spec-domain-discovery; operating-model/link validation; HandoffBrief schema; finish-state gates",
+      "result": "PASS: 48 tests in main and 50 in the spec worktree with 0 failures; all document, schema, whitespace, clean-worktree, reviewed-feature, deleted-branch, and empty pending-HITL gates passed",
+      "observed_at": "2026-07-13T18:49:13Z"
+    },
+    {
+      "command": "Live GitHub issue and Project query for ArifMolon/yula#13",
+      "result": "PASS: issue CLOSED as COMPLETED; Project Done; Phase 0; Orchestration; R1; SPEC-P0-domain-discovery; Human Review Required; Size S",
+      "observed_at": "2026-07-13T18:49:13Z"
     }
   ],
   "active_lessons": [
     "lesson-delivery-patterns-are-not-domain-language"
   ],
   "open_loops": [
-    "Run final fresh verification and complete only issue #13's remaining Done and closure gates.",
-    "Do not select or start issue #14 until the product owner explicitly chooses it in a later session."
+    "No next issue is selected; issue #14 must not start unless the product owner explicitly selects it."
   ],
-  "next_action": "Run final fresh verification, then move only issue #13 to Done and close it if every completion gate remains satisfied.",
+  "next_action": "Ask the product owner to explicitly select the next in-scope work without starting issue #14 automatically.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-13-issue-13-delivery",
-  "updated_at": "2026-07-13T18:47:52Z"
+  "updated_at": "2026-07-13T18:49:13Z"
 }
