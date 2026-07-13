@@ -2,11 +2,11 @@
 
 **Date:** 2026-07-13  
 **Status:** Approved for implementation planning  
-**Source:** `okf/YULA_DDD_Proje_Plani.md` v1.0
+**Source:** `my-docs/plan/YULA_DDD_Proje_Plani.md` v1.0
 
 ## Purpose
 
-Create `okf/plan.html`, a standalone interactive visualization of the canonical YULA DDD project plan. The page must serve two audiences in one continuous experience:
+Create `my-docs/plan/plan.html`, a standalone interactive visualization of the canonical YULA DDD project plan. The page must serve two audiences in one continuous experience:
 
 1. Provide an executive overview of vision, phases, duration, dependencies, decisions, and risks.
 2. Provide an implementation workspace where technical readers can inspect bounded contexts, work packages, exit criteria, Definition of Done, and agent operating rules.

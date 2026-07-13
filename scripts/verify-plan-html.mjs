@@ -1,12 +1,12 @@
 import { readFile } from 'node:fs/promises';
 
-const htmlPath = new URL('../okf/plan.html', import.meta.url);
+const htmlPath = new URL('../my-docs/plan/plan.html', import.meta.url);
 let html = '';
 
 try {
   html = await readFile(htmlPath, 'utf8');
 } catch (error) {
-  console.error(`FAIL: okf/plan.html okunamadi: ${error.message}`);
+  console.error(`FAIL: my-docs/plan/plan.html okunamadi: ${error.message}`);
   process.exit(1);
 }
 
