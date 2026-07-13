@@ -49,7 +49,7 @@
     "The product owner explicitly accepted the written canonical Event Storming record on 2026-07-14 without requesting changes.",
     "No product implementation, spec-to-main merge, push, external ingestion, credential use, or next-issue selection is authorized."
   ],
-  "implementation_state": "Issue #14 is open and its GitHub Project status is Progress. The product owner approved all three conversational design sections and explicitly accepted the written canonical Event Storming record without requesting changes. The accepted record is ready to commit with this updated HandoffBrief after fresh verification. The clean spec worktree remains active on feature/14-validate-knowledge-ingestion-domain-flow. No product code or external ingestion occurred.",
+  "implementation_state": "Issue #14 is open and its GitHub Project status is Progress. The product owner approved all three conversational design sections and explicitly accepted the written canonical Event Storming record without requesting changes. The accepted Event Storming record and its acceptance-state HandoffBrief are committed on local main at 3c3c37d. The clean spec worktree remains active on feature/14-validate-knowledge-ingestion-domain-flow. No product code, external ingestion, push, or spec-to-main merge occurred.",
   "changed_code": [
     "my-docs/okf/handoffs/issue-14.json",
     "my-docs/okf/event-storming/issue-14-knowledge-ingestion-domain-flow.md"
@@ -89,20 +89,24 @@
       "command": "node scripts/validate-operating-model.mjs; accepted HandoffBrief schema and whitespace checks",
       "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review; HandoffBrief conforms; accepted files have no whitespace errors",
       "observed_at": "2026-07-13T22:16:14Z"
+    },
+    {
+      "command": "git show --stat --oneline --summary 3c3c37d",
+      "result": "PASS: local main commit contains only the accepted issue #14 Event Storming record and HandoffBrief update",
+      "observed_at": "2026-07-13T22:16:42Z"
     }
   ],
   "active_lessons": [
     "lesson-delivery-patterns-are-not-domain-language"
   ],
   "open_loops": [
-    "Commit the accepted issue #14 Event Storming record and HandoffBrief after fresh verification.",
     "In a fresh session, move only issue #14 through Review, reviewed-feature evidence, scripts/spec-worktree finish-feature, Done, and closure gates.",
     "Do not select or configure issue #15 during issue #14."
   ],
-  "next_action": "Run fresh verification and commit only the accepted issue #14 Event Storming record and HandoffBrief, then create a matt-handoff continuation document.",
+  "next_action": "In a fresh session, re-run live preflight and verification, then move only issue #14 to Review when every Review gate remains satisfied.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-14-issue-14-domain-discovery",
-  "updated_at": "2026-07-13T22:15:29Z"
+  "updated_at": "2026-07-13T22:16:42Z"
 }
