@@ -35,6 +35,7 @@
     "Issue #13 is Done; issue #15 remains unselected and unconfigured.",
     "The successful flow is anchored on promoting a claude-video analysis artifact into canonical knowledge.",
     "The user explicitly initiates promotion after reviewing the artifact; artifact production alone never authorizes a persistent knowledge write.",
+    "The promoted artifact is registered as one provenance-bearing KnowledgeSource and curated into one Concept before canonical persistence; KnowledgeChunk and index data are derived afterward.",
     "No product implementation, spec-to-main merge, push, external ingestion, credential use, or next-issue selection is authorized."
   ],
   "implementation_state": "Issue #14 is open and its GitHub Project status is Progress with Phase 0, Orchestration, R1, SPEC-P0-domain-discovery, Human Review Required, and Size S. The clean spec worktree is active on feature/14-validate-knowledge-ingestion-domain-flow. No Event Storming record or product code has been created, and no external source has been ingested.",
@@ -61,10 +62,10 @@
     "Write and obtain explicit product-owner acceptance of the canonical issue #14 record before Review or completion.",
     "Do not select or configure issue #15 during issue #14."
   ],
-  "next_action": "Ask the product owner whether the promoted artifact becomes one Concept or is curated into multiple Concepts before canonical persistence.",
+  "next_action": "Ask the product owner whether the initial promotion Command authorizes validated curation and persistence or requires a second preview confirmation for the proposed Concept.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-13-issue-14-domain-discovery",
-  "updated_at": "2026-07-13T18:55:38Z"
+  "updated_at": "2026-07-13T18:57:31Z"
 }
