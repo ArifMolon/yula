@@ -4,7 +4,7 @@
   "bounded_context": "orchestration",
   "kind": "domain-discovery",
   "status": "Review",
-  "branch": "feature/12-validate-task-execution-domain-flow",
+  "branch": "spec/domain-discovery",
   "spec_worktree": ".worktrees/spec-domain-discovery",
   "objective": "Create the canonical end-to-end Event Storming record for recalling project progress and continuing an eligible Task through required approval to an observable Execution result.",
   "ubiquitous_language": [
@@ -39,7 +39,7 @@
     "Detailed trace and cost presentation is outside the MVP; minimum audit and diagnostic evidence remains required.",
     "The product owner approved the conversational model and explicitly accepted the written canonical record on 2026-07-13 without requesting changes."
   ],
-  "implementation_state": "The product-owner Domain Discovery conversation resolved the task-execution actors, Commands, Domain Events, Policies, Hotspots, invariants, Task lifecycle, Published Language boundaries, failure scenarios, and acceptance evidence. The product owner accepted the written canonical record at my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md. No product code was implemented and no next issue was selected.",
+  "implementation_state": "The product-owner Domain Discovery conversation resolved the task-execution actors, Commands, Domain Events, Policies, Hotspots, invariants, Task lifecycle, Published Language boundaries, failure scenarios, and acceptance evidence. The product owner accepted the written canonical record at my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md. scripts/spec-worktree finish-feature 12 returned the worktree to spec/domain-discovery and deleted the reviewed feature branch. No product code was implemented and no next issue was selected.",
   "changed_code": [
     "my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md",
     "my-docs/okf/handoffs/issue-12.json"
@@ -64,6 +64,16 @@
       "command": "Live GitHub issue and Project query for ArifMolon/yula#12",
       "result": "OPEN; Progress; Phase 0; Orchestration; R1; SPEC-P0-domain-discovery; Human Review Required; Size S",
       "observed_at": "2026-07-13T16:17:25Z"
+    },
+    {
+      "command": "scripts/spec-worktree finish-feature 12",
+      "result": "PASS: switched to spec/domain-discovery, confirmed feature content already merged, and deleted feature/12-validate-task-execution-domain-flow",
+      "observed_at": "2026-07-13T16:26:35Z"
+    },
+    {
+      "command": "node --test tests/*.test.mjs in .worktrees/spec-domain-discovery after feature finish",
+      "result": "PASS: 50 tests, 0 failures",
+      "observed_at": "2026-07-13T16:26:35Z"
     }
   ],
   "active_lessons": [
@@ -71,12 +81,12 @@
   ],
   "open_loops": [
     "Accepted Ubiquitous Language candidates remain candidates until the separate Phase 0 glossary workflow ratifies them.",
-    "Finish the reviewed issue #12 feature branch into spec/domain-discovery and record the resulting delivery state without starting another issue."
+    "GitHub issue #12 remains OPEN and its Project status remains Progress until the product owner authorizes the external delivery-state update."
   ],
-  "next_action": "Finish the reviewed feature/12-validate-task-execution-domain-flow branch into spec/domain-discovery using scripts/spec-worktree finish-feature 12, then verify the merged result.",
+  "next_action": "Ask the product owner whether to transition GitHub issue #12 through its accepted delivery state and close it without selecting or starting another issue.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-13-issue-12-domain-discovery",
-  "updated_at": "2026-07-13T16:25:21Z"
+  "updated_at": "2026-07-13T16:26:35Z"
 }
