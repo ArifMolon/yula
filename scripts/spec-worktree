@@ -25,6 +25,14 @@ case "$command_name" in
     run git worktree add "$worktree" -b "$spec_branch"
     run git config extensions.worktreeConfig true
     run git -C "$worktree" config --worktree yula.spec-branch "$spec_branch"
+    if [ "$dry_run" = true ]; then
+      echo "+ configure worktree-local ignore for generated .npmrc"
+    else
+      worktree_git_dir=$(git -C "$worktree" rev-parse --absolute-git-dir)
+      exclude_file="$worktree_git_dir/yula-exclude"
+      printf '/.npmrc\n' > "$exclude_file"
+      git -C "$worktree" config --worktree core.excludesFile "$exclude_file"
+    fi
     run pnpm config set store-dir "$main_root/my-docs/.local/pnpm-store" --location project --dir "$worktree"
     run git -C "$worktree" sparse-checkout set --no-cone "/*" "!/my-docs/" "!/.worktrees/" "!/.superpowers/"
     ;;

@@ -4,9 +4,14 @@ import { access, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { contextSlugs as contexts } from '../scripts/domain-catalog.mjs';
+import { resolveCanonicalRoot } from '../scripts/repository-paths.mjs';
+
+const repositoryRoot = path.resolve(import.meta.dirname, '..');
+const canonicalRoot = await resolveCanonicalRoot(repositoryRoot);
+const canonicalFile = relativePath => path.join(canonicalRoot, relativePath);
 
 test('all exported reviews are resolved with provenance', async () => {
-  const reviews = await readFile('my-docs/plan/plan-reviews.md', 'utf8');
+  const reviews = await readFile(canonicalFile('my-docs/plan/plan-reviews.md'), 'utf8');
 
   assert.doesNotMatch(reviews, /^status: (open|revision-required)$/m);
   assert.equal((reviews.match(/^status: resolved$/gm) ?? []).length, 2);
@@ -28,7 +33,7 @@ test('canonical documentation lives under my-docs', async () => {
     'my-docs/okf/log.md',
   ];
 
-  await Promise.all(required.map(path => access(path)));
+  await Promise.all(required.map(relativePath => access(canonicalFile(relativePath))));
 });
 
 test('operating model schemas expose the approved contracts', async () => {
@@ -48,25 +53,25 @@ test('operating model schemas expose the approved contracts', async () => {
 });
 
 test('policies codify DDD, HITL, voice, and worktree boundaries', async () => {
-  const ddd = await readFile('my-docs/policies/ddd-must.md', 'utf8');
+  const ddd = await readFile(canonicalFile('my-docs/policies/ddd-must.md'), 'utf8');
   for (const name of ['Manager', 'Helper', 'Utils', 'CommonService', 'process', 'updateData', 'setStatus']) {
     assert.match(ddd, new RegExp(`\\b${name}\\b`));
   }
   assert.match(ddd, /glossary change before merge/i);
 
-  const hitl = await readFile('my-docs/policies/hitl.md', 'utf8');
+  const hitl = await readFile(canonicalFile('my-docs/policies/hitl.md'), 'utf8');
   assert.match(hitl, /R3 and R4 always require human approval/i);
   assert.match(hitl, /Pending required HITL blocks.*Done/i);
 
-  const voice = await readFile('my-docs/policies/voice.md', 'utf8');
+  const voice = await readFile(canonicalFile('my-docs/policies/voice.md'), 'utf8');
   assert.match(voice, /second voice confirmation/i);
   assert.match(voice, /R4.*explicit UI.*biometric/is);
 
-  const boundaries = await readFile('my-docs/policies/worktree-boundaries.md', 'utf8');
+  const boundaries = await readFile(canonicalFile('my-docs/policies/worktree-boundaries.md'), 'utf8');
   assert.match(boundaries, /one spec.*one worktree/i);
   assert.match(boundaries, /mutable shared `node_modules`.*prohibited/i);
 
-  await Promise.all(contexts.map(context => access(`my-docs/okf/contexts/${context}/lessons/.gitkeep`)));
+  await Promise.all(contexts.map(context => access(canonicalFile(`my-docs/okf/contexts/${context}/lessons/.gitkeep`))));
 });
 
 test('operating model validator reports no contract errors', async () => {

@@ -4,9 +4,14 @@ import { access, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { contextNames } from '../scripts/domain-catalog.mjs';
+import { resolveCanonicalRoot } from '../scripts/repository-paths.mjs';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const repositoryFile = relativePath => path.join(repositoryRoot, relativePath);
+const canonicalRoot = await resolveCanonicalRoot(repositoryRoot);
+const repositoryFile = relativePath => path.join(
+  relativePath === 'my-docs' || relativePath.startsWith('my-docs/') ? canonicalRoot : repositoryRoot,
+  relativePath,
+);
 
 test('CLAUDE.md delegates shared project instructions to AGENTS.md', async () => {
   const adapter = await readFile(repositoryFile('CLAUDE.md'), 'utf8');

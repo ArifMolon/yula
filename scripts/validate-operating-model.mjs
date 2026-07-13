@@ -1,14 +1,17 @@
 import { readFile, access, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { resolveCanonicalRoot } from './repository-paths.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const canonicalRoot = await resolveCanonicalRoot(root);
 const schemaNames = ['handoff-brief', 'failure-observation', 'lesson', 'knowledge-update-requested'];
 const policyFiles = ['ddd-must.md', 'hitl.md', 'voice.md', 'worktree-boundaries.md'];
 const templateFiles = ['handoff-brief.md', 'failure-observation.md', 'lesson.md', 'knowledge-update-requested.md'];
 
 async function text(relativePath) {
-  return readFile(path.join(root, relativePath), 'utf8');
+  const owningRoot = relativePath === 'my-docs' || relativePath.startsWith('my-docs/') ? canonicalRoot : root;
+  return readFile(path.join(owningRoot, relativePath), 'utf8');
 }
 
 async function filesUnder(directory, suffix) {
@@ -36,7 +39,7 @@ export async function validateMarkdownLinks(files) {
 }
 
 async function validateKnowledgeRequests() {
-  const directory = path.join(root, 'my-docs/okf/requests');
+  const directory = path.join(canonicalRoot, 'my-docs/okf/requests');
   let files = [];
   try { files = await filesUnder(directory, '.json'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
   const errors = [];
@@ -81,13 +84,13 @@ export async function validateOperatingModel() {
 
   for (const target of ['my-docs/okf/index.md', 'my-docs/okf/log.md', 'my-docs/adr/0001-development-operating-model.md']) {
     try {
-      await access(path.join(root, target));
+      await access(path.join(canonicalRoot, target));
     } catch {
       errors.push(`${target}: missing`);
     }
   }
 
-  errors.push(...await validateMarkdownLinks(await filesUnder(path.join(root, 'my-docs'), '.md')));
+  errors.push(...await validateMarkdownLinks(await filesUnder(path.join(canonicalRoot, 'my-docs'), '.md')));
   errors.push(...await validateKnowledgeRequests());
 
   return errors;
