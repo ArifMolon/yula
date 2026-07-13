@@ -24,18 +24,18 @@ DDD is a **MUST** and merge-blocking rule. Follow the canonical [DDD MUST policy
 
 Always use the full bounded-context name in work, tests, issues, and Project data:
 
-1. Orchestration Context
-2. Agent Studio Context
-3. Tool Lab Context
-4. Knowledge Context
-5. Workspace Context
-6. Model Gateway Context
-7. Interaction Context
-8. Approval & Security Context
-9. Integration Context
-10. Observability & Cost Context
-11. Remote Access Context
-12. Identity & Secrets Context
+1. Orchestration
+2. Agent Studio
+3. Tool Lab
+4. Knowledge
+5. Workspace
+6. Model Gateway
+7. Interaction
+8. Approval & Security
+9. Integration
+10. Observability & Cost
+11. Remote Access
+12. Identity & Secrets
 
 ## Delivery and worktree workflow
 
