@@ -556,11 +556,11 @@ git commit -m "docs: record Phase 0 specification backlog"
 
 Summarize outcome, bounded context, dependencies, Risk, Human Review, and Size for each spec. Recommend a first spec based on dependency order and tracer-bullet learning value, but do not select it automatically.
 
-- [ ] **Step 2: Record the user's selected spec**
+- [x] **Step 2: Record the user's selected spec**
 
 Update only that Spec Issue's Project state from Todo to Progress after explicit selection. All other Phase 0 specs remain Todo.
 
-- [ ] **Step 3: End this implementation plan at the agreed boundary**
+- [x] **Step 3: End this implementation plan at the agreed boundary**
 
 Do not create child issues in this task. The next session uses `matt-to-tickets` for the selected spec only, validates its tracer-bullet edges, creates its spec worktree, and starts one feature issue with a fresh HandoffBrief.
 

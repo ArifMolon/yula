@@ -19,3 +19,7 @@
 ## Recommended first spec
 
 `SPEC-P0-domain-discovery` is the dependency frontier. It validates the domain flows and Context Map that block the glossary and seed decisions; those in turn block every implementation spike.
+
+## Selected first spec
+
+`SPEC-P0-domain-discovery` ([issue #1](https://github.com/ArifMolon/yula/issues/1)) was selected by the user on 2026-07-13 and moved from `Todo` to `Progress`. No child issue was created in this operating-model implementation session.
