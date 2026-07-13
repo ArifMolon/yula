@@ -1,0 +1,19 @@
+name: Spec Completion Validation
+on:
+  workflow_dispatch:
+    inputs:
+      state_fixture:
+        description: Repository-relative JSON state assembled from final acceptance, handoff, branches, worktrees, claims, and HITL.
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - run: node scripts/validate-spec-cleanup.mjs --fixture "${{ inputs.state_fixture }}"
+      - run: node scripts/validate-operating-model.mjs

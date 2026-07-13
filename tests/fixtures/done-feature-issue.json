@@ -1,0 +1,1 @@
+{"issue":"ArifMolon/yula#10","spec":"SPEC-phase-0-foundation","bounded_context":"orchestration","capability":"Execution lifecycle foundation","pull_request":"ArifMolon/yula#11","events":["ExecutionStarted"],"lessons":[],"verification":["node --test: pass"],"status":"Done","handoff_brief":{"updated_at":"2026-07-13T03:00:00Z"},"active_claims":[],"pending_hitl":[]}

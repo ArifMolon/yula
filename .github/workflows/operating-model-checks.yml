@@ -1,0 +1,16 @@
+name: Operating Model Checks
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - run: node --test tests/*.test.mjs
+      - run: node scripts/validate-operating-model.mjs
+      - run: node scripts/verify-plan-html.mjs
+      - run: git diff --check "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"

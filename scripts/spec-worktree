@@ -1,0 +1,78 @@
+#!/bin/sh
+set -eu
+
+dry_run=false
+if [ "${1:-}" = "--dry-run" ]; then dry_run=true; shift; fi
+command_name=${1:-}
+shift || true
+
+usage() {
+  echo "usage: scripts/spec-worktree [--dry-run] bootstrap|inspect|cleanup <spec-name>" >&2
+  echo "       scripts/spec-worktree [--dry-run] start-feature <issue-number> <feature-name>" >&2
+  echo "       scripts/spec-worktree [--dry-run] finish-feature <issue-number>" >&2
+  exit 2
+}
+
+valid_slug() { case "$1" in *[!a-z0-9-]*|'') echo "invalid slug: $1" >&2; exit 2;; esac; }
+run() { if [ "$dry_run" = true ]; then echo "+ $*"; else "$@"; fi; }
+main_root=$(git worktree list --porcelain | sed -n '1s/^worktree //p')
+
+case "$command_name" in
+  bootstrap)
+    spec=${1:-}; [ -n "$spec" ] || usage; valid_slug "$spec"
+    worktree=".worktrees/spec-$spec"; spec_branch="spec/$spec"
+    [ "$dry_run" = true ] || [ ! -e "$worktree" ] || { echo "spec worktree already exists: $worktree" >&2; exit 1; }
+    run git worktree add "$worktree" -b "$spec_branch"
+    run git config extensions.worktreeConfig true
+    run git -C "$worktree" config --worktree yula.spec-branch "$spec_branch"
+    run pnpm config set store-dir "$main_root/my-docs/.local/pnpm-store" --location project --dir "$worktree"
+    run git -C "$worktree" sparse-checkout set --no-cone "/*" "!/my-docs/" "!/.worktrees/" "!/.superpowers/"
+    ;;
+  start-feature)
+    issue=${1:-}; feature=${2:-}; [ -n "$issue" ] && [ -n "$feature" ] || usage; valid_slug "$feature"
+    case "$issue" in *[!0-9]*|'') echo "invalid issue number: $issue" >&2; exit 2;; esac
+    branch="feature/$issue-$feature"
+    if [ "$dry_run" = true ]; then echo "+ git switch -c $branch from configured spec branch"; exit 0; fi
+    spec_branch=$(git config --worktree --get yula.spec-branch)
+    [ "$(git branch --show-current)" = "$spec_branch" ] || { echo "spec branch must be active before starting a feature" >&2; exit 1; }
+    git switch -c "$branch" "$spec_branch"
+    git config "branch.$branch.yulaSpec" "$spec_branch"
+    ;;
+  finish-feature)
+    issue=${1:-}; [ -n "$issue" ] || usage
+    if [ "$dry_run" = true ]; then echo "+ finish reviewed feature issue $issue and delete its merged branch"; exit 0; fi
+    active=$(git branch --show-current); spec_branch=$(git config --worktree --get yula.spec-branch); spec=${spec_branch#spec/}
+    case "$active" in "feature/$issue-"*) ;; *) echo "issue $issue is not active" >&2; exit 1;; esac
+    [ -z "$(git status --porcelain)" ] || { echo "dirty worktree blocks feature finish" >&2; exit 1; }
+    state_file="$main_root/my-docs/.local/spec-state/$spec.json"
+    [ -f "$state_file" ] || { echo "missing spec state: $state_file" >&2; exit 1; }
+    node -e 'const fs=require("fs");const [p,b]=process.argv.slice(1);const s=JSON.parse(fs.readFileSync(p));if(!(s.reviewed_feature_branches||[]).includes(b))throw Error("review evidence missing for "+b);if((s.pending_hitl||[]).length)throw Error("pending HITL blocks feature finish");' "$state_file" "$active"
+    git switch "$spec_branch"
+    git merge --no-ff "$active"
+    git branch -d "$active"
+    ;;
+  inspect)
+    spec=${1:-}; [ -n "$spec" ] || usage; valid_slug "$spec"; worktree=".worktrees/spec-$spec"
+    git -C "$worktree" status --short --branch; git branch --list "feature/*"; git stash list
+    ;;
+  cleanup)
+    spec=${1:-}; [ -n "$spec" ] || usage; valid_slug "$spec"; worktree=".worktrees/spec-$spec"; spec_branch="spec/$spec"
+    if [ "$dry_run" = true ]; then
+      echo "+ validate clean merged spec worktree, reviewed branches, stashes, claims, artifacts, and HITL"
+      echo "+ git worktree remove $worktree"; echo "+ git branch -d $spec_branch"; echo "+ git worktree prune"; exit 0
+    fi
+    [ -d "$worktree" ] || { echo "missing worktree: $worktree" >&2; exit 1; }
+    [ -z "$(git -C "$worktree" status --porcelain)" ] || { echo "dirty worktree blocks cleanup" >&2; exit 1; }
+    [ "$(git -C "$worktree" branch --show-current)" = "$spec_branch" ] || { echo "feature branch still active" >&2; exit 1; }
+    [ -z "$(git branch --no-merged main --list "$spec_branch")" ] || { echo "unmerged spec branch blocks cleanup" >&2; exit 1; }
+    state_file="$main_root/my-docs/.local/spec-state/$spec.json"
+    [ -f "$state_file" ] || { echo "missing spec completion state: $state_file" >&2; exit 1; }
+    feature_branches=""
+    for candidate in $(git for-each-ref --format='%(refname:short)' refs/heads/feature/); do
+      if [ "$(git config --get "branch.$candidate.yulaSpec" || true)" = "$spec_branch" ]; then feature_branches="${feature_branches}${candidate}\n"; fi
+    done
+    YULA_FEATURE_BRANCHES="$(printf '%b' "$feature_branches")" YULA_STASHES="$(git stash list)" node scripts/validate-spec-cleanup.mjs --fixture "$state_file"
+    git worktree remove "$worktree"; git branch -d "$spec_branch"; git worktree prune
+    ;;
+  *) usage;;
+esac
