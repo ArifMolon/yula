@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { readFile } from 'node:fs/promises';
 import { planBootstrap, planFeatureStart, planCleanup } from '../scripts/worktree-policy.mjs';
 
 const exec = promisify(execFile);
@@ -49,4 +50,10 @@ test('feature commands use the plan interface without a spec argument', async ()
   assert.match(started.stdout, /feature\/12-execution-lifecycle/);
   const finished = await exec('scripts/spec-worktree', ['--dry-run', 'finish-feature', '12']);
   assert.match(finished.stdout, /finish reviewed feature issue 12/);
+});
+
+test('feature branches are associated with their owning spec', async () => {
+  const script = await readFile('scripts/spec-worktree', 'utf8');
+  assert.match(script, /branch\.\$branch\.yulaSpec/);
+  assert.match(script, /branch\.\$candidate\.yulaSpec/);
 });

@@ -36,6 +36,7 @@ case "$command_name" in
     spec_branch=$(git config --worktree --get yula.spec-branch)
     [ "$(git branch --show-current)" = "$spec_branch" ] || { echo "spec branch must be active before starting a feature" >&2; exit 1; }
     git switch -c "$branch" "$spec_branch"
+    git config "branch.$branch.yulaSpec" "$spec_branch"
     ;;
   finish-feature)
     issue=${1:-}; [ -n "$issue" ] || usage
@@ -66,7 +67,11 @@ case "$command_name" in
     [ -z "$(git branch --no-merged main --list "$spec_branch")" ] || { echo "unmerged spec branch blocks cleanup" >&2; exit 1; }
     state_file="$main_root/my-docs/.local/spec-state/$spec.json"
     [ -f "$state_file" ] || { echo "missing spec completion state: $state_file" >&2; exit 1; }
-    YULA_FEATURE_BRANCHES="$(git branch --list 'feature/*' | sed 's/^[* ]*//')" YULA_STASHES="$(git stash list)" node scripts/validate-spec-cleanup.mjs --fixture "$state_file"
+    feature_branches=""
+    for candidate in $(git for-each-ref --format='%(refname:short)' refs/heads/feature/); do
+      if [ "$(git config --get "branch.$candidate.yulaSpec" || true)" = "$spec_branch" ]; then feature_branches="${feature_branches}${candidate}\n"; fi
+    done
+    YULA_FEATURE_BRANCHES="$(printf '%b' "$feature_branches")" YULA_STASHES="$(git stash list)" node scripts/validate-spec-cleanup.mjs --fixture "$state_file"
     git worktree remove "$worktree"; git branch -d "$spec_branch"; git worktree prune
     ;;
   *) usage;;
