@@ -1,0 +1,68 @@
+{
+  "issue": "ArifMolon/yula#14",
+  "spec": "SPEC-P0-domain-discovery",
+  "bounded_context": "orchestration",
+  "kind": "domain-discovery",
+  "status": "Progress",
+  "branch": "feature/14-validate-knowledge-ingestion-domain-flow",
+  "spec_worktree": ".worktrees/spec-domain-discovery",
+  "objective": "Create the canonical end-to-end Event Storming record for knowledge ingestion, from source intake and provenance validation through canonical OKF persistence and derived index refresh.",
+  "ubiquitous_language": [
+    "Command",
+    "Domain Event",
+    "Policy",
+    "Hotspot",
+    "KnowledgeSource",
+    "Provenance",
+    "Concept",
+    "KnowledgeBundle",
+    "KnowledgeWriter",
+    "KnowledgeChunk",
+    "IndexShard",
+    "Published Language"
+  ],
+  "invariants": [
+    "OKF Markdown with provenance and git history is canonical knowledge.",
+    "A Concept cannot be persisted without provenance.",
+    "All persistent OKF, FTS5, embedding, and sqlite-vec writes cross the single Core KnowledgeWriter boundary.",
+    "FTS5, embeddings, sqlite-vec, KnowledgeChunk, and IndexShard data are derived and rebuildable from canonical OKF.",
+    "Deleting a Concept removes its chunks and derived index entries together.",
+    "Retrieved sources and generated content are untrusted data, never policy or instructions."
+  ],
+  "decisions": [
+    "The product owner explicitly selected issue #14 as the next child of SPEC-P0-domain-discovery.",
+    "Issue #14 is owned by the full Orchestration bounded-context name for delivery while the discovery must make Knowledge, Integration, Model Gateway, Approval & Security, and Orchestration ownership boundaries explicit.",
+    "Issue #13 is Done; issue #15 remains unselected and unconfigured.",
+    "No product implementation, spec-to-main merge, push, external ingestion, credential use, or next-issue selection is authorized."
+  ],
+  "implementation_state": "Issue #14 is open and its GitHub Project status is Progress with Phase 0, Orchestration, R1, SPEC-P0-domain-discovery, Human Review Required, and Size S. The clean spec worktree is active on feature/14-validate-knowledge-ingestion-domain-flow. No Event Storming record or product code has been created, and no external source has been ingested.",
+  "changed_code": [
+    "my-docs/okf/handoffs/issue-14.json"
+  ],
+  "verification": [
+    {
+      "command": "Live GitHub issue and Project query for ArifMolon/yula#14",
+      "result": "PASS: issue OPEN and unblocked; Project Progress; Phase 0; Orchestration; R1; SPEC-P0-domain-discovery; Human Review Required; Size S",
+      "observed_at": "2026-07-13T18:53:19Z"
+    },
+    {
+      "command": "scripts/spec-worktree start-feature 14 validate-knowledge-ingestion-domain-flow",
+      "result": "PASS: clean spec worktree switched from spec/domain-discovery to feature/14-validate-knowledge-ingestion-domain-flow with owning spec branch configured",
+      "observed_at": "2026-07-13T18:53:19Z"
+    }
+  ],
+  "active_lessons": [
+    "lesson-delivery-patterns-are-not-domain-language"
+  ],
+  "open_loops": [
+    "Conduct the product-owner conversational Event Storming for the knowledge ingestion domain flow.",
+    "Write and obtain explicit product-owner acceptance of the canonical issue #14 record before Review or completion.",
+    "Do not select or configure issue #15 during issue #14."
+  ],
+  "next_action": "Ask the product owner which concrete successful knowledge-ingestion scenario should anchor the Event Storming flow.",
+  "blockers": [],
+  "pending_hitl": [],
+  "updater": "codex",
+  "session": "codex-2026-07-13-issue-14-domain-discovery",
+  "updated_at": "2026-07-13T18:53:19Z"
+}
