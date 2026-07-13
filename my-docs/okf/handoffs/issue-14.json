@@ -44,6 +44,7 @@
     "GitHub Project Risk R1 is issue-delivery metadata and does not classify the runtime RiskLevel of PromoteArtifactToKnowledge; the two models must not be conflated.",
     "The runtime RiskLevel of PromoteArtifactToKnowledge remains an explicit Hotspot for later Approval & Security and glossary work; issue #14 does not freeze a classification.",
     "The product owner approved the corrected successful-flow and bounded-context ownership design section without conflating delivery Risk and runtime RiskLevel.",
+    "The product owner approved the Policy, failure-flow, and invariant design section, including provenance rejection, untrusted-data handling, idempotency, supersession, serialized canonical writes, degraded index recovery, and cascading deletion.",
     "No product implementation, spec-to-main merge, push, external ingestion, credential use, or next-issue selection is authorized."
   ],
   "implementation_state": "Issue #14 is open and its GitHub Project status is Progress with Phase 0, Orchestration, R1, SPEC-P0-domain-discovery, Human Review Required, and Size S. The clean spec worktree is active on feature/14-validate-knowledge-ingestion-domain-flow. No Event Storming record or product code has been created, and no external source has been ingested.",
@@ -70,10 +71,10 @@
     "Write and obtain explicit product-owner acceptance of the canonical issue #14 record before Review or completion.",
     "Do not select or configure issue #15 during issue #14."
   ],
-  "next_action": "Present the Policy, failure-flow, and invariant design section for product-owner approval.",
+  "next_action": "Present the Actors, Commands, Domain Events, Published Language, Hotspots, and verification design section for product-owner approval.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-13-issue-14-domain-discovery",
-  "updated_at": "2026-07-13T22:03:38Z"
+  "updated_at": "2026-07-13T22:07:08Z"
 }
