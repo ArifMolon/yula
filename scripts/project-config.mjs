@@ -33,8 +33,42 @@ export function buildDryRun() {
   return lines;
 }
 
+export function fieldDifferences(current, desired = projectConfig.fields) {
+  const differences = [];
+  for (const [name, definition] of Object.entries(desired)) {
+    const field = current.find(candidate => candidate.name === name);
+    if (!field) {
+      differences.push({ name, reason: 'missing' });
+      continue;
+    }
+    if (Array.isArray(definition)) {
+      const actual = (field.options ?? []).map(option => option.name);
+      if (JSON.stringify(actual) !== JSON.stringify(definition)) {
+        differences.push({ name, reason: 'options', expected: definition, actual });
+      }
+    }
+  }
+  return differences;
+}
+
 function gh(args, input) {
   return execFileSync('gh', args, { encoding: 'utf8', input, stdio: input ? ['pipe', 'pipe', 'inherit'] : ['ignore', 'pipe', 'inherit'] }).trim();
+}
+
+function updateSingleSelectField(field, options) {
+  const colors = ['GRAY', 'BLUE', 'YELLOW', 'GREEN', 'RED', 'PURPLE', 'ORANGE'];
+  const query = 'mutation($input:UpdateProjectV2FieldInput!){updateProjectV2Field(input:$input){projectV2Field{... on ProjectV2SingleSelectField{id name options{id name}}}}}';
+  const variables = {
+    query,
+    variables: {
+      input: {
+        fieldId: field.id,
+        name: field.name,
+        singleSelectOptions: options.map((name, index) => ({ name, color: colors[index % colors.length], description: `${name} delivery state` })),
+      },
+    },
+  };
+  gh(['api', 'graphql', '--input', '-'], `${JSON.stringify(variables)}\n`);
 }
 
 function projects() {
@@ -52,8 +86,19 @@ function ensureProject() {
   return project;
 }
 
-function ensureFields(number) {
+function ensureFields(project) {
+  const number = project.number;
   const current = JSON.parse(gh(['project', 'field-list', String(number), '--owner', projectConfig.owner, '--format', 'json'])).fields ?? [];
+  const differences = fieldDifferences(current);
+  const mismatched = differences.filter(item => item.reason === 'options');
+  if (mismatched.length && project.items?.totalCount !== 0) {
+    throw new Error(`Refusing to replace fields on a non-empty Project: ${mismatched.map(item => item.name).join(', ')}`);
+  }
+  for (const mismatch of mismatched) {
+    const field = current.find(candidate => candidate.name === mismatch.name);
+    updateSingleSelectField(field, mismatch.expected);
+    field.options = mismatch.expected.map(name => ({ name }));
+  }
   for (const [name, definition] of Object.entries(projectConfig.fields)) {
     if (current.some(field => field.name === name)) continue;
     const args = ['project', 'field-create', String(number), '--owner', projectConfig.owner, '--name', name];
@@ -72,7 +117,7 @@ function ensureLabels() {
 export function applyProjectConfig() {
   const project = ensureProject();
   gh(['project', 'link', String(project.number), '--owner', projectConfig.owner, '--repo', projectConfig.repository]);
-  ensureFields(project.number);
+  ensureFields(project);
   ensureLabels();
   return project;
 }
@@ -81,8 +126,7 @@ export function verifyProjectConfig() {
   const project = projects().find(item => item.title === projectConfig.title);
   if (!project) return [`missing project: ${projectConfig.title}`];
   const fields = JSON.parse(gh(['project', 'field-list', String(project.number), '--owner', projectConfig.owner, '--format', 'json'])).fields ?? [];
-  const errors = [];
-  for (const name of Object.keys(projectConfig.fields)) if (!fields.some(field => field.name === name)) errors.push(`missing field: ${name}`);
+  const errors = fieldDifferences(fields).map(item => item.reason === 'missing' ? `missing field: ${item.name}` : `field options differ: ${item.name} expected ${item.expected.join('|')} actual ${item.actual.join('|')}`);
   const labels = JSON.parse(gh(['label', 'list', '--repo', projectConfig.repository, '--limit', '200', '--json', 'name'])).map(item => item.name);
   for (const label of Object.values(labelConfig).flat()) if (!labels.includes(label)) errors.push(`missing label: ${label}`);
   return errors;

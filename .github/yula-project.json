@@ -1,0 +1,39 @@
+{
+  "owner": "ArifMolon",
+  "repository": "ArifMolon/yula",
+  "project": {
+    "id": "PVT_kwHOAT1rMs4BdOWg",
+    "number": 5,
+    "url": "https://github.com/users/ArifMolon/projects/5"
+  },
+  "fields": {
+    "Status": "PVTSSF_lAHOAT1rMs4BdOWgzhXxX6c",
+    "Phase": "PVTSSF_lAHOAT1rMs4BdOWgzhXxX9o",
+    "Bounded Context": "PVTSSF_lAHOAT1rMs4BdOWgzhXxX-E",
+    "Risk": "PVTSSF_lAHOAT1rMs4BdOWgzhXxX-8",
+    "Spec": "PVTF_lAHOAT1rMs4BdOWgzhXxYAo",
+    "Human Review": "PVTSSF_lAHOAT1rMs4BdOWgzhXxYAs",
+    "Size": "PVTSSF_lAHOAT1rMs4BdOWgzhXxYAw"
+  },
+  "options": {
+    "Status": {"Todo": "33a41aad", "Progress": "9b06b90e", "Review": "4e576017", "Done": "2b47e9e8"},
+    "Phase": {"0": "ec5ee99f"},
+    "Bounded Context": {
+      "Orchestration": "280f6eb2",
+      "Agent Studio": "a5ecfaad",
+      "Tool Lab": "bb31d8f4",
+      "Knowledge": "79138ec9",
+      "Workspace": "c33baeb5",
+      "Model Gateway": "b99d2cb0",
+      "Interaction": "85b8015f",
+      "Approval & Security": "6467aeea",
+      "Integration": "bd84d1ce",
+      "Observability & Cost": "f484c17a",
+      "Remote Access": "628ad1c3",
+      "Identity & Secrets": "8a0c87d1"
+    },
+    "Risk": {"R1": "a64b41b7", "R2": "d7e4f853", "R3": "69a55dee"},
+    "Human Review": {"Policy": "11613c01", "Required": "874aa369"},
+    "Size": {"S": "8be27362", "M": "e0f58633"}
+  }
+}

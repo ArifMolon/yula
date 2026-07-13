@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { projectConfig, labelConfig, buildDryRun } from '../scripts/project-config.mjs';
+import { projectConfig, labelConfig, buildDryRun, fieldDifferences } from '../scripts/project-config.mjs';
 
 const contexts = [
   'Orchestration', 'Agent Studio', 'Tool Lab', 'Knowledge', 'Workspace',
@@ -34,6 +34,13 @@ test('dry run is deterministic and non-mutating', () => {
   assert.deepEqual(first, buildDryRun());
   assert.ok(first.some(line => line.includes('YULA Development')));
   assert.ok(first.some(line => line.includes('context:orchestration')));
+});
+
+test('field comparison detects mismatched single-select options', () => {
+  const current = [{ name: 'Status', options: [{ name: 'Todo' }, { name: 'In Progress' }, { name: 'Done' }] }];
+  assert.deepEqual(fieldDifferences(current, { Status: ['Todo', 'Progress', 'Review', 'Done'] }), [
+    { name: 'Status', reason: 'options', expected: ['Todo', 'Progress', 'Review', 'Done'], actual: ['Todo', 'In Progress', 'Done'] },
+  ]);
 });
 
 test('GitHub templates collect domain outcomes and invariants', async () => {
