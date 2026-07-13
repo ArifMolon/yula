@@ -572,7 +572,7 @@ Do not create child issues in this task. The next session uses `matt-to-tickets`
 - [x] `node scripts/verify-plan-html.mjs` passes if the dashboard was integrated.
 - [x] `git diff --check` reports no whitespace errors.
 - [x] Both exported reviews are resolved with provenance and the canonical plan contains all approved revisions.
-- [ ] `my-docs/.local/` is ignored; durable OKF, plans, handoffs, and generated artifacts are absent from code worktrees.
+- [x] `my-docs/.local/` is ignored; durable OKF, plans, handoffs, and generated artifacts are absent from code worktrees.
 - [x] DDD generic names and numeric-only context identifiers are rejected by validation.
 - [x] R3/R4 and voice confirmation policies match the approved operating model.
 - [x] No GitHub Action starts the next issue, invents lessons, impersonates approval, or force-deletes worktrees.
