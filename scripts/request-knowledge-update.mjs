@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { validateDoneEligibility } from './validate-project-item.mjs';
@@ -29,6 +29,17 @@ export function buildKnowledgeUpdate(item) {
   return { filename: `my-docs/okf/requests/${id}.json`, record, logEntry };
 }
 
+export async function writeKnowledgeUpdate(item, root = process.cwd()) {
+  const result = buildKnowledgeUpdate(item);
+  const recordPath = path.join(root, result.filename);
+  const logPath = path.join(root, 'my-docs/okf/log.md');
+  await mkdir(path.dirname(recordPath), { recursive: true });
+  await mkdir(path.dirname(logPath), { recursive: true });
+  await writeFile(recordPath, `${JSON.stringify(result.record, null, 2)}\n`, { flag: 'wx' });
+  await appendFile(logPath, `\n${result.logEntry}`);
+  return result;
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const fixtureIndex = process.argv.indexOf('--fixture');
   if (fixtureIndex < 0 || !process.argv[fixtureIndex + 1]) {
@@ -36,6 +47,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     process.exitCode = 2;
   } else {
     const item = JSON.parse(await readFile(process.argv[fixtureIndex + 1], 'utf8'));
-    console.log(JSON.stringify(buildKnowledgeUpdate(item), null, 2));
+    const result = process.argv.includes('--write') ? await writeKnowledgeUpdate(item) : buildKnowledgeUpdate(item);
+    console.log(JSON.stringify(result, null, 2));
   }
 }

@@ -17,9 +17,11 @@ jobs:
       - name: Validate operating model
         run: node scripts/validate-operating-model.mjs
       - name: Validate Project fields and latest HandoffBrief
-        env:
-          ISSUE_EVENT: ${{ toJSON(github.event.issue) }}
-        run: node scripts/validate-project-item.mjs
+        run: |
+          handoff="my-docs/okf/handoffs/issue-${{ github.event.issue.number }}.json"
+          test -f "$handoff"
+          node -e 'const fs=require("fs"); const p=process.argv[1]; const value=JSON.parse(fs.readFileSync(p)); if(value.status!=="Done") throw Error("Project/Handoff status must be Done");' "$handoff"
+          cp "$handoff" "$RUNNER_TEMP/validated-issue.json"
       - name: Build deterministic KnowledgeUpdateRequested payload
         run: node scripts/request-knowledge-update.mjs --fixture "$RUNNER_TEMP/validated-issue.json" --write
       - name: Open knowledge-only pull request

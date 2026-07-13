@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { validateDoneEligibility } from '../scripts/validate-project-item.mjs';
-import { buildKnowledgeUpdate } from '../scripts/request-knowledge-update.mjs';
+import { buildKnowledgeUpdate, writeKnowledgeUpdate } from '../scripts/request-knowledge-update.mjs';
 import { validateSpecCleanup } from '../scripts/validate-spec-cleanup.mjs';
 
 const fixture = async name => JSON.parse(await readFile(`tests/fixtures/${name}.json`, 'utf8'));
@@ -16,6 +18,15 @@ test('Done issue produces a deterministic knowledge request and log entry', asyn
   for (const value of [issue.issue, issue.pull_request, issue.spec, issue.bounded_context, issue.capability, ...issue.events, ...issue.verification]) {
     assert.ok(first.logEntry.includes(value));
   }
+});
+
+test('write mode creates the request and appends the OKF log', async () => {
+  const root = await mkdtemp(path.join(tmpdir(), 'yula-knowledge-'));
+  const result = await writeKnowledgeUpdate(await fixture('done-feature-issue'), root);
+  const record = JSON.parse(await readFile(path.join(root, result.filename), 'utf8'));
+  const log = await readFile(path.join(root, 'my-docs/okf/log.md'), 'utf8');
+  assert.equal(record.request_id, result.record.request_id);
+  assert.ok(log.includes(result.record.request_id));
 });
 
 for (const [name, message] of [
