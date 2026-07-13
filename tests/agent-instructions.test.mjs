@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 test('CLAUDE.md delegates shared project instructions to AGENTS.md', async () => {
   const adapter = await readFile('CLAUDE.md', 'utf8');
-  assert.match(adapter, /(?:read|load).{0,80}`?AGENTS\.md`?/is);
+  assert.match(adapter, /\bMUST read and obey (?:the )?(?:repository )?root `AGENTS\.md`/i);
 });
 
 test('AGENTS.md links every canonical operating-model artifact', async () => {
@@ -23,7 +23,9 @@ test('AGENTS.md links every canonical operating-model artifact', async () => {
   ];
 
   for (const [name, artifact] of requiredArtifacts) {
-    assert.ok(instructions.includes(artifact), `AGENTS.md references the canonical ${name}: ${artifact}`);
+    const destination = artifact.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const canonicalLink = new RegExp(`\\]\\(\\s*<?(?:\\./)?${destination}>?(?:#[^)\\s]+)?\\s*\\)`);
+    assert.match(instructions, canonicalLink, `AGENTS.md links the canonical ${name}: ${artifact}`);
   }
 });
 
@@ -42,6 +44,6 @@ test('CLAUDE.md does not copy shared project instruction sections', async () => 
   ];
 
   for (const heading of sharedHeadings) {
-    assert.doesNotMatch(adapter, new RegExp(`^#{1,6}\\s+${heading}\\s*$`, 'im'));
+    assert.doesNotMatch(adapter, new RegExp(`^#{1,6}\\s+${heading}(?:\\s|[:—-]|$)`, 'im'));
   }
 });
