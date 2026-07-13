@@ -1,0 +1,50 @@
+name: Spec Issue
+description: Define one coherent domain capability.
+title: "[Spec] "
+labels: ["kind:capability"]
+body:
+  - type: dropdown
+    id: bounded_context
+    attributes:
+      label: Bounded Context
+      options: [Orchestration, Agent Studio, Tool Lab, Knowledge, Workspace, Model Gateway, Interaction, Approval & Security, Integration, Observability & Cost, Remote Access, Identity & Secrets]
+    validations: {required: true}
+  - type: textarea
+    id: outcome
+    attributes: {label: Outcome, description: User or system outcome in domain language.}
+    validations: {required: true}
+  - type: textarea
+    id: ubiquitous_language
+    attributes: {label: Ubiquitous Language, description: Binding terms used by this capability.}
+    validations: {required: true}
+  - type: textarea
+    id: invariants
+    attributes: {label: Invariants, description: Rules that must always hold.}
+    validations: {required: true}
+  - type: textarea
+    id: published_language
+    attributes: {label: Published Language, description: Events, ports, or APIs crossing context boundaries.}
+    validations: {required: true}
+  - type: textarea
+    id: dependencies
+    attributes: {label: Dependencies, description: Blocking spec identifiers or none.}
+    validations: {required: true}
+  - type: dropdown
+    id: hitl_policy
+    attributes: {label: HITL Policy, options: [Policy, Required]}
+    validations: {required: true}
+  - type: dropdown
+    id: risk
+    attributes: {label: RiskLevel, options: [R0, R1, R2, R3, R4]}
+    validations: {required: true}
+  - type: dropdown
+    id: size
+    attributes: {label: Size, options: [XS, S, M]}
+    validations: {required: true}
+  - type: textarea
+    id: exit_criteria
+    attributes: {label: Exit Criteria, description: Observable completion evidence.}
+    validations: {required: true}
+  - type: textarea
+    id: child_issues
+    attributes: {label: Child Issues, description: Leave empty until this spec is selected.}

@@ -1,0 +1,17 @@
+name: Domain Decision
+description: Record a hard-to-reverse domain or architecture decision.
+title: "[Decision] "
+labels: ["kind:decision"]
+body:
+  - type: textarea
+    id: context
+    attributes: {label: Decision Context}
+    validations: {required: true}
+  - type: textarea
+    id: options
+    attributes: {label: Options and Tradeoffs}
+    validations: {required: true}
+  - type: textarea
+    id: decision
+    attributes: {label: Decision and Consequences}
+    validations: {required: true}

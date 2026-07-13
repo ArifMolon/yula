@@ -1,0 +1,29 @@
+name: Tracer Bullet
+description: Deliver one end-to-end domain outcome for a selected spec.
+title: "[Tracer] "
+labels: ["kind:capability"]
+body:
+  - type: input
+    id: spec
+    attributes: {label: Spec, description: Parent Spec Issue identifier.}
+    validations: {required: true}
+  - type: textarea
+    id: outcome
+    attributes: {label: Domain Outcome}
+    validations: {required: true}
+  - type: checkboxes
+    id: slice
+    attributes:
+      label: Tracer Slice
+      options:
+        - {label: Domain model and invariant}
+        - {label: Application command/query}
+        - {label: Ports contract}
+        - {label: Adapters integration}
+        - {label: UI interaction where required}
+        - {label: Tests and verification}
+        - {label: Evaluation evidence where required}
+  - type: textarea
+    id: handoff
+    attributes: {label: HandoffBrief, description: Current-state handoff path.}
+    validations: {required: true}
