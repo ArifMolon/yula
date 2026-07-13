@@ -17,10 +17,15 @@ test('AGENTS.md links every canonical operating-model artifact', async () => {
   const instructions = await readFile(repositoryFile('AGENTS.md'), 'utf8');
   const requiredArtifacts = [
     ['DDD plan', 'my-docs/plan/YULA_DDD_Proje_Plani.md'],
+    ['operating-model design', 'my-docs/plan/2026-07-13-yula-development-operating-model-design.md'],
+    ['operating-model ADR', 'my-docs/adr/0001-development-operating-model.md'],
     ['DDD policy', 'my-docs/policies/ddd-must.md'],
     ['worktree policy', 'my-docs/policies/worktree-boundaries.md'],
     ['worktree command', 'scripts/spec-worktree'],
     ['HandoffBrief', 'my-docs/templates/handoff-brief.md'],
+    ['HandoffBrief schema', 'schemas/handoff-brief.schema.json'],
+    ['Lesson schema', 'schemas/lesson.schema.json'],
+    ['KnowledgeUpdateRequested schema', 'schemas/knowledge-update-requested.schema.json'],
     ['HITL policy', 'my-docs/policies/hitl.md'],
     ['OKF index', 'my-docs/okf/index.md'],
     ['GitHub Project configuration', '.github/yula-project.json'],

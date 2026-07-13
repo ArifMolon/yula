@@ -8,7 +8,7 @@ YULA is a local-first personal AI orchestration platform that turns user goals i
 
 ## Source of truth and session preflight
 
-Use this hierarchy: the DDD plan; accepted ADRs; provenance-bearing OKF Markdown; then code. GitHub Project is authoritative for delivery state, while Git and the current issue's HandoffBrief describe implementation state. Searchable indexes and generated views are derived, never canonical.
+Use this hierarchy: the DDD plan; the [development operating-model design](my-docs/plan/2026-07-13-yula-development-operating-model-design.md) and accepted decisions such as [ADR-0001](my-docs/adr/0001-development-operating-model.md); provenance-bearing OKF Markdown; then code. GitHub Project is authoritative for delivery state, while Git and the current issue's HandoffBrief describe implementation state. Searchable indexes and generated views are derived, never canonical.
 
 At the start of every session:
 
@@ -47,9 +47,9 @@ Agents may advance only the issue explicitly placed in scope. They must not sele
 
 ## Knowledge, handoff, and lessons
 
-OKF Markdown is canonical; FTS5, embeddings, and sqlite-vec are rebuildable indexes. Keep the current HandoffBrief compact and factual: current implementation state, evidence, open loops, pending approvals, and one concrete next action—not a transcript.
+OKF Markdown is canonical; FTS5, embeddings, and sqlite-vec are rebuildable indexes. Keep the current HandoffBrief compact, factual, and valid against its [schema](schemas/handoff-brief.schema.json): current implementation state, evidence, open loops, pending approvals, and one concrete next action—not a transcript.
 
-Record meaningful work in the OKF log with provenance. A lesson begins as a trace-backed candidate using the [Lesson template](my-docs/templates/lesson.md); never invent or promote a lesson without validation evidence. Use a [KnowledgeUpdateRequested record](my-docs/templates/knowledge-update-requested.md) when the operating model requires review or promotion.
+Record meaningful work in the OKF log with provenance. A lesson begins as a trace-backed candidate using the [Lesson template](my-docs/templates/lesson.md) and [schema](schemas/lesson.schema.json); never invent or promote a lesson without validation evidence. Use a [KnowledgeUpdateRequested record](my-docs/templates/knowledge-update-requested.md) conforming to its [schema](schemas/knowledge-update-requested.schema.json) when the operating model requires review or promotion.
 
 All persistent OKF and shared-index writes cross the serialized Core `KnowledgeWriter` boundary. Agents, workers, and ingestion tools must not write shared SQLite state directly or create competing durable knowledge writers.
 
