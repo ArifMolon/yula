@@ -46,9 +46,10 @@
     "The product owner approved the corrected successful-flow and bounded-context ownership design section without conflating delivery Risk and runtime RiskLevel.",
     "The product owner approved the Policy, failure-flow, and invariant design section, including provenance rejection, untrusted-data handling, idempotency, supersession, serialized canonical writes, degraded index recovery, and cascading deletion.",
     "The product owner approved the Actors, Commands, past-tense Domain Events, Published Language, Hotspots, and verification design section, including the Git commit durability gate.",
+    "The product owner explicitly accepted the written canonical Event Storming record on 2026-07-14 without requesting changes.",
     "No product implementation, spec-to-main merge, push, external ingestion, credential use, or next-issue selection is authorized."
   ],
-  "implementation_state": "Issue #14 is open and its GitHub Project status is Progress. The product owner approved all three conversational design sections for the artifact-first knowledge-ingestion flow. The written Event Storming record now exists at status Review, passed self-review and fresh repository validation, and remains uncommitted pending explicit product-owner written acceptance. The clean spec worktree remains active on feature/14-validate-knowledge-ingestion-domain-flow. No product code or external ingestion occurred.",
+  "implementation_state": "Issue #14 is open and its GitHub Project status is Progress. The product owner approved all three conversational design sections and explicitly accepted the written canonical Event Storming record without requesting changes. The accepted record is ready to commit with this updated HandoffBrief after fresh verification. The clean spec worktree remains active on feature/14-validate-knowledge-ingestion-domain-flow. No product code or external ingestion occurred.",
   "changed_code": [
     "my-docs/okf/handoffs/issue-14.json",
     "my-docs/okf/event-storming/issue-14-knowledge-ingestion-domain-flow.md"
@@ -78,20 +79,30 @@
       "command": "Event Storming self-review token scan; git diff --check; untracked record whitespace check",
       "result": "PASS: no placeholders, prohibited generic domain names, or whitespace errors",
       "observed_at": "2026-07-13T22:12:17Z"
+    },
+    {
+      "command": "node --test tests/*.test.mjs in main and .worktrees/spec-domain-discovery after written acceptance",
+      "result": "PASS: 48 tests, 0 failures in main; 50 tests, 0 failures in the spec worktree",
+      "observed_at": "2026-07-13T22:16:14Z"
+    },
+    {
+      "command": "node scripts/validate-operating-model.mjs; accepted HandoffBrief schema and whitespace checks",
+      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review; HandoffBrief conforms; accepted files have no whitespace errors",
+      "observed_at": "2026-07-13T22:16:14Z"
     }
   ],
   "active_lessons": [
     "lesson-delivery-patterns-are-not-domain-language"
   ],
   "open_loops": [
-    "Obtain explicit product-owner acceptance of the written canonical issue #14 Event Storming record before committing it or moving the issue to Review.",
-    "After written acceptance, re-run fresh verification and complete only issue #14's remaining delivery gates.",
+    "Commit the accepted issue #14 Event Storming record and HandoffBrief after fresh verification.",
+    "In a fresh session, move only issue #14 through Review, reviewed-feature evidence, scripts/spec-worktree finish-feature, Done, and closure gates.",
     "Do not select or configure issue #15 during issue #14."
   ],
-  "next_action": "Present the written canonical issue #14 Event Storming record and ask the product owner to accept it or request specific changes.",
+  "next_action": "Run fresh verification and commit only the accepted issue #14 Event Storming record and HandoffBrief, then create a matt-handoff continuation document.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-14-issue-14-domain-discovery",
-  "updated_at": "2026-07-13T22:12:17Z"
+  "updated_at": "2026-07-13T22:15:29Z"
 }
