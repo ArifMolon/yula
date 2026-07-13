@@ -3,7 +3,7 @@ type: event-storming
 issue: ArifMolon/yula#12
 spec: SPEC-P0-domain-discovery
 bounded_context: orchestration
-status: Review
+status: Prod
 product_owner: Arif
 session: codex-2026-07-13-issue-12-domain-discovery
 recorded_at: 2026-07-13T16:15:49Z
@@ -21,7 +21,7 @@ provenance:
 
 This record captures the product-owner-validated model for recalling progress across many projects and continuing an eligible Task through a controlled Execution. The successful scenario begins with “Bu projede en son hangi adımda kaldık, sıradaki görev nedir ve benden beklenen bir onay var mı?” and continues by publishing verified development for review through a branch push and draft pull request.
 
-The product owner approved the conversational model on 2026-07-13. The written record still requires product-owner review before issue #12 can transition from Progress to Review or Done. No approval for implementation, merge, deployment, or starting another issue is implied.
+The product owner approved the conversational model and explicitly accepted this written record on 2026-07-13. The acceptance covers this issue #12 domain-discovery artifact only. It does not approve product implementation, deployment, or starting another issue.
 
 ## Ubiquitous Language candidates
 
@@ -196,6 +196,8 @@ Orchestration owns Task, dependency eligibility, Delegated Execution, reconcilia
 No unresolved actor ownership, Command intent, event tense, policy outcome, aggregate invariant, bounded-context ownership, Published Language responsibility, or R3/R4 approval rule remained at the end of the conversational model review. The candidate vocabulary still requires the separate Phase 0 glossary workflow before becoming canonical project-wide language.
 
 ## Product-owner acceptance evidence
+
+**Review outcome:** Accepted by the product owner on 2026-07-13 after the canonical file was presented for written-record review. No changes were requested.
 
 Issue #12 may move to Review only when all of the following are true:
 

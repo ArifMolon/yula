@@ -3,7 +3,7 @@
   "spec": "SPEC-P0-domain-discovery",
   "bounded_context": "orchestration",
   "kind": "domain-discovery",
-  "status": "Progress",
+  "status": "Review",
   "branch": "feature/12-validate-task-execution-domain-flow",
   "spec_worktree": ".worktrees/spec-domain-discovery",
   "objective": "Create the canonical end-to-end Event Storming record for recalling project progress and continuing an eligible Task through required approval to an observable Execution result.",
@@ -37,9 +37,9 @@
     "Delegated Execution is the canonical term; YOLO Mode may be a UI alias and DelegateTaskExecution is R2.",
     "Mobile chat may embed a secure ApprovalRequest-bound card, but free-form chat text is not an approval decision.",
     "Detailed trace and cost presentation is outside the MVP; minimum audit and diagnostic evidence remains required.",
-    "The product owner approved the conversational model on 2026-07-13; the written canonical record still requires product-owner review before status progression."
+    "The product owner approved the conversational model and explicitly accepted the written canonical record on 2026-07-13 without requesting changes."
   ],
-  "implementation_state": "The product-owner Domain Discovery conversation resolved the task-execution actors, Commands, Domain Events, Policies, Hotspots, invariants, Task lifecycle, Published Language boundaries, failure scenarios, and acceptance evidence. The canonical draft now exists at my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md. No product code was implemented and no next issue was selected.",
+  "implementation_state": "The product-owner Domain Discovery conversation resolved the task-execution actors, Commands, Domain Events, Policies, Hotspots, invariants, Task lifecycle, Published Language boundaries, failure scenarios, and acceptance evidence. The product owner accepted the written canonical record at my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md. No product code was implemented and no next issue was selected.",
   "changed_code": [
     "my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md",
     "my-docs/okf/handoffs/issue-12.json"
@@ -70,18 +70,13 @@
     "lesson-delivery-patterns-are-not-domain-language"
   ],
   "open_loops": [
-    "The product owner must review the written canonical Event Storming record after creation and request changes or explicitly accept it.",
     "Accepted Ubiquitous Language candidates remain candidates until the separate Phase 0 glossary workflow ratifies them.",
-    "After written-record acceptance, refresh verification and use the approved issue/spec workflow to decide whether issue #12 may transition to Review."
+    "Finish the reviewed issue #12 feature branch into spec/domain-discovery and record the resulting delivery state without starting another issue."
   ],
-  "next_action": "Ask the product owner to review my-docs/okf/event-storming/issue-12-task-execution-domain-flow.md and explicitly accept it or request changes.",
-  "blockers": [
-    "Required product-owner review of the written canonical Event Storming record is pending."
-  ],
-  "pending_hitl": [
-    "Product-owner review of the written issue #12 Event Storming record is required before Review can transition to Done; no written-record approval decision has been recorded yet."
-  ],
+  "next_action": "Finish the reviewed feature/12-validate-task-execution-domain-flow branch into spec/domain-discovery using scripts/spec-worktree finish-feature 12, then verify the merged result.",
+  "blockers": [],
+  "pending_hitl": [],
   "updater": "codex",
   "session": "codex-2026-07-13-issue-12-domain-discovery",
-  "updated_at": "2026-07-13T16:17:25Z"
+  "updated_at": "2026-07-13T16:25:21Z"
 }
