@@ -1,0 +1,34 @@
+name: Issue Close Knowledge Request
+on:
+  issues:
+    types: [closed]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+jobs:
+  request:
+    if: contains(github.event.issue.labels.*.name, 'kind:capability')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - name: Validate operating model
+        run: node scripts/validate-operating-model.mjs
+      - name: Validate Project fields and latest HandoffBrief
+        env:
+          ISSUE_EVENT: ${{ toJSON(github.event.issue) }}
+        run: node scripts/validate-project-item.mjs
+      - name: Build deterministic KnowledgeUpdateRequested payload
+        run: node scripts/request-knowledge-update.mjs --fixture "$RUNNER_TEMP/validated-issue.json" --write
+      - name: Open knowledge-only pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="knowledge/issue-${{ github.event.issue.number }}"
+          git switch -c "$branch"
+          git add my-docs/okf
+          git commit -m "docs: request knowledge update for #${{ github.event.issue.number }}"
+          git push origin "$branch"
+          gh pr create --title "Knowledge update for #${{ github.event.issue.number }}" --body "Generated from validated issue-close evidence. No lessons, plans, ADRs, prompts, or approvals are invented." --base main --head "$branch"
