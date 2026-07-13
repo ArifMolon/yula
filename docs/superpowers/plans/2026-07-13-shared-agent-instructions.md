@@ -66,12 +66,7 @@ Expected: PASS.
 
 - [x] **Step 3: Commit the implementation**
 
-Run:
-
-```bash
-git add AGENTS.md CLAUDE.md
-git commit -m "docs: share YULA instructions across agent tools"
-```
+Result: `AGENTS.md` was committed in `d3a7fa6` with follow-up contract fixes, and the `CLAUDE.md` adapter was committed in `ab09a3c`.
 
 ### Task 4: Verify repository integration
 
