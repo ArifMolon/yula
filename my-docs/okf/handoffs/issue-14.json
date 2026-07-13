@@ -3,8 +3,8 @@
   "spec": "SPEC-P0-domain-discovery",
   "bounded_context": "orchestration",
   "kind": "domain-discovery",
-  "status": "Progress",
-  "branch": "feature/14-validate-knowledge-ingestion-domain-flow",
+  "status": "Review",
+  "branch": "spec/domain-discovery",
   "spec_worktree": ".worktrees/spec-domain-discovery",
   "objective": "Create the canonical end-to-end Event Storming record for knowledge ingestion, from source intake and provenance validation through canonical OKF persistence and derived index refresh.",
   "ubiquitous_language": [
@@ -49,7 +49,7 @@
     "The product owner explicitly accepted the written canonical Event Storming record on 2026-07-14 without requesting changes.",
     "No product implementation, spec-to-main merge, push, external ingestion, credential use, or next-issue selection is authorized."
   ],
-  "implementation_state": "Issue #14 is open and its GitHub Project status is Progress. The product owner approved all three conversational design sections and explicitly accepted the written canonical Event Storming record without requesting changes. The accepted Event Storming record and its acceptance-state HandoffBrief are committed on local main at 3c3c37d. The clean spec worktree remains active on feature/14-validate-knowledge-ingestion-domain-flow. No product code, external ingestion, push, or spec-to-main merge occurred.",
+  "implementation_state": "Issue #14 remains open and its GitHub Project status is Review. The product owner accepted the canonical Event Storming record committed on local main at 3c3c37d, with its acceptance-state HandoffBrief recorded at 2dadd8c. Fresh Review verification passed, reviewed-feature evidence was recorded with no pending HITL, and scripts/spec-worktree finish-feature 14 returned the clean worktree to spec/domain-discovery and deleted feature/14-validate-knowledge-ingestion-domain-flow. No product code, external ingestion, push, or spec-to-main merge occurred.",
   "changed_code": [
     "my-docs/okf/handoffs/issue-14.json",
     "my-docs/okf/event-storming/issue-14-knowledge-ingestion-domain-flow.md"
@@ -94,19 +94,34 @@
       "command": "git show --stat --oneline --summary 3c3c37d",
       "result": "PASS: local main commit contains only the accepted issue #14 Event Storming record and HandoffBrief update",
       "observed_at": "2026-07-13T22:16:42Z"
+    },
+    {
+      "command": "Fresh node --test tests/*.test.mjs in main and .worktrees/spec-domain-discovery; operating-model/link validation; HandoffBrief schema; whitespace and worktree-safety checks",
+      "result": "PASS: 48 tests in main and 50 in the spec worktree with 0 failures; 4 schema, 4 policy, 4 template, and 2 resolved review checks passed; HandoffBrief conforms; accepted commits have no whitespace errors; worktree clean, branch ownership configured, no stash, and pending HITL empty",
+      "observed_at": "2026-07-13T22:23:27Z"
+    },
+    {
+      "command": "Live GitHub Project query for ArifMolon/yula#14",
+      "result": "PASS: Review; Phase 0; Orchestration; R1; SPEC-P0-domain-discovery; Human Review Required; Size S",
+      "observed_at": "2026-07-13T22:23:27Z"
+    },
+    {
+      "command": "scripts/spec-worktree finish-feature 14 from .worktrees/spec-domain-discovery",
+      "result": "PASS: switched to spec/domain-discovery; branch already up to date; deleted feature/14-validate-knowledge-ingestion-domain-flow at 95e8d30",
+      "observed_at": "2026-07-13T22:23:27Z"
     }
   ],
   "active_lessons": [
     "lesson-delivery-patterns-are-not-domain-language"
   ],
   "open_loops": [
-    "In a fresh session, move only issue #14 through Review, reviewed-feature evidence, scripts/spec-worktree finish-feature, Done, and closure gates.",
+    "Run final fresh verification and complete only issue #14's remaining Done and closure gates.",
     "Do not select or configure issue #15 during issue #14."
   ],
-  "next_action": "In a fresh session, re-run live preflight and verification, then move only issue #14 to Review when every Review gate remains satisfied.",
+  "next_action": "Run final fresh verification, then move only issue #14 to Done and close it if every completion gate remains satisfied.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "codex",
-  "session": "codex-2026-07-14-issue-14-domain-discovery",
-  "updated_at": "2026-07-13T22:16:42Z"
+  "session": "codex-2026-07-14-issue-14-delivery",
+  "updated_at": "2026-07-13T22:23:27Z"
 }
