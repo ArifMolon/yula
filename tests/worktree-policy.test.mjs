@@ -2,7 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { readFile } from 'node:fs/promises';
+import { access, mkdtemp, readFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { planBootstrap, planFeatureStart, planCleanup } from '../scripts/worktree-policy.mjs';
 
 const exec = promisify(execFile);
@@ -56,4 +58,23 @@ test('feature branches are associated with their owning spec', async () => {
   const script = await readFile('scripts/spec-worktree', 'utf8');
   assert.match(script, /branch\.\$branch\.yulaSpec/);
   assert.match(script, /branch\.\$candidate\.yulaSpec/);
+});
+
+test('bootstrap leaves generated pnpm configuration untracked but ignored', async () => {
+  const fixture = await mkdtemp(path.join(tmpdir(), 'yula-worktree-'));
+  await exec('git', ['init', '--initial-branch=main'], { cwd: fixture });
+  await exec('git', ['config', 'user.email', 'test@yula.local'], { cwd: fixture });
+  await exec('git', ['config', 'user.name', 'YULA Test'], { cwd: fixture });
+  await exec('mkdir', ['-p', 'scripts', 'my-docs/.local'], { cwd: fixture });
+  await exec('cp', [path.resolve('scripts/spec-worktree'), 'scripts/spec-worktree'], { cwd: fixture });
+  await exec('touch', ['README.md'], { cwd: fixture });
+  await exec('git', ['add', '.'], { cwd: fixture });
+  await exec('git', ['commit', '-m', 'fixture'], { cwd: fixture });
+
+  await exec('scripts/spec-worktree', ['bootstrap', 'domain-discovery'], { cwd: fixture });
+
+  const worktree = path.join(fixture, '.worktrees/spec-domain-discovery');
+  await access(path.join(worktree, '.npmrc'));
+  const status = await exec('git', ['status', '--porcelain'], { cwd: worktree });
+  assert.equal(status.stdout, '');
 });
