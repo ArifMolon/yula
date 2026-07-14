@@ -25,7 +25,7 @@ const expectations = [
   ['progress storage', /yula-plan-progress-v1/],
   ...Array.from({ length: 6 }, (_, index) => [`phase ${index}`, new RegExp(`\\{n:${index},title:`)]),
   ...Array.from({ length: 12 }, (_, index) => [`BC-${index + 1}`, new RegExp(`BC-${index + 1}(?!\\d)`)]),
-  ...Array.from({ length: 14 }, (_, index) => {
+  ...Array.from({ length: 17 }, (_, index) => {
     const id = String(index + 1).padStart(4, '0');
     return [`ADR-${id}`, new RegExp(`ADR-${id}`)];
   }),
