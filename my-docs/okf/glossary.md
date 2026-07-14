@@ -4,8 +4,9 @@ version: v1
 spec: SPEC-P0-ubiquitous-language
 issue: ArifMolon/yula#2
 bounded_context: agent-studio
-status: Review
+status: Prod
 product_owner: Arif
+ratified_at: 2026-07-14T08:30:00Z
 session: pi-2026-07-14-issue-2-freeze-glossary
 recorded_at: 2026-07-14T08:00:00Z
 provenance:
@@ -141,6 +142,8 @@ This Glossary v1 satisfies issue #2's exit criteria:
 1. **Glossary v1 covers Phase 0 terms and all twelve context names** — yes: 12 bounded contexts listed; seed terms from §3.2 plus the deferred-hotspot names are defined.
 2. **DDD MUST validator references the canonical glossary** — to be satisfied by a test that asserts `my-docs/policies/ddd-must.md` (or the operating-model validator) references `my-docs/okf/glossary.md`.
 
-## Product-owner review (pending)
+## Product-owner review (ratified)
 
-This glossary is presented for product-owner ratification. The outcome is recorded only when the product owner decides through the HITL Review Inbox. Until then this record remains in `Review`; it is not canonical and issue #2 does not move to Done.
+This glossary was presented to the product owner and explicitly ratified on 2026-07-14 through the HITL Review Inbox. No changes were requested. Ratification is a genuine, scoped R1 human decision; it was not inferred, manufactured, or replayed by any agent.
+
+The ratification confirms: the 12 bounded-context names, the ~40 seed terms from plan §3.2, the 4 deferred-hotspot resolutions (EvaluationArtifactSnapshot, ConversionArtifact, IndexState names, minimum provenance schema, meaningfully-changed threshold), and the boundary markers. Glossary v1 is canonical as of 2026-07-14.
