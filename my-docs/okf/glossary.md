@@ -1,8 +1,9 @@
 ---
 type: glossary
-version: v1
+version: v1.1
 spec: SPEC-P0-ubiquitous-language
 issue: ArifMolon/yula#2
+revision_issue: ArifMolon/yula#3
 bounded_context: agent-studio
 status: Prod
 product_owner: Arif
@@ -19,6 +20,7 @@ provenance:
   - my-docs/okf/event-storming/issue-15-markitdown-document-ingestion-domain-flow.md
   - my-docs/okf/handoffs/issue-16.json
   - my-docs/okf/handoffs/issue-2.json
+  - my-docs/adr/0017-tool-lab-to-knowledge-route.md (issue #3, glossary v1.1 note)
 ---
 
 # Glossary v1 — Phase 0 Ubiquitous Language
@@ -113,6 +115,15 @@ These rules disambiguate words that could take different meanings across context
 - **Blocked**: not a Task state; an eligibility condition with an explicit cause (unmet dependency, pending approval, exhausted budget, source conflict, uncertain external effect).
 - **Knowledge durability**: OKF Markdown with provenance and Git history is canonical; FTS5, embeddings, sqlite-vec, KnowledgeChunk, and IndexState are derived and rebuildable.
 
+## Glossary v1.1 note (issue #3 — Tool Lab → Knowledge Published Language)
+
+Issue #3 resolved Context Map conclusion hotspot #6 in favor of a direct Published Language route (ADR-0017). To record the resulting shared status without moving any term out of its owning context, this note applies to two existing terms:
+
+- `EvaluationArtifactSnapshot` — **shared Published Language**; Tool Lab publishes it, Knowledge consumes it. The owning context for the term definition stays Knowledge.
+- `ConversionArtifact` — **shared Published Language**; Tool Lab publishes it, Knowledge consumes it. The owning context for the term definition stays Knowledge.
+
+No term is moved between bounded-context columns by this note. The producer/consumer split reflects ADR-0017: Tool Lab owns the contract and publishes the immutable artifact; Knowledge consumes it through the single `KnowledgeWriter`; Orchestration carries only a promotion `Command` with a reference, never the payload.
+
 ## Deferred-hotspot names resolved here (from Context Map conclusion)
 
 Issue #16 deferred four naming hotspots to this glossary. They are resolved here:
@@ -129,11 +140,13 @@ Issue #16 deferred four naming hotspots to this glossary. They are resolved here
 
 ## Terms explicitly out of scope for Glossary v1
 
-These remain candidates or tactical-design decisions and are **not** ratified here. They are owned by issue #3 (architecture ADRs) or later tactical design, per the Context Map conclusion:
+These remain candidates or tactical-design decisions and are **not** ratified in Glossary v1. They were owned by issue #3 (architecture ADRs) or later tactical design, per the Context Map conclusion. Issue #3 resolved the three architecture-ADR items; each now points to its canonical ADR:
 
-- Runtime `RiskLevel` assignment policy for specific actions (issue #3 + Approval & Security tactical design).
-- Direct Published Language vs Integration ACL route for Tool Lab → Knowledge (issue #3 / Context Map tactical design).
-- OKF file write and Git commit partial-failure recovery protocol (later tactical design / KnowledgeWriter recovery ADR under issue #3).
+- Runtime `RiskLevel` assignment policy for specific actions — **resolved by ADR-0006** (issue #3). Ingestion of the local OKF canonical record + derived index is R2; credential/external ingestion is R3;Approval & Security owns and applies the policy, Orchestration sends intent only.
+- Direct Published Language vs Integration ACL route for Tool Lab → Knowledge — **resolved by ADR-0017** (issue #3) as a direct Published Language route; Tool Lab publishes, Knowledge consumes. See the v1.1 note above.
+- OKF file write and Git commit partial-failure recovery protocol — **resolved by ADR-0015** (issue #3). The Git commit is the sole durable fence, covering only the Concept-write order (file → commit); index rebuild is out of the fence; external side-effects are out of scope of this fence (separate R3 + rule).
+
+Tactical-design refinements (semantiği narroving, human escalation) may follow these ADRs but cannot weaken them.
 
 ## Exit criteria for issue #2
 
