@@ -26,12 +26,17 @@ The first slice is only complete when a single local file can be uploaded, conve
 
 ### Future source files to create in the implementation worktree
 
-- Create `src/interaction/document-upload/submit-document-source.*`: UI-facing command entry for a single local upload.
-- Create `src/orchestration/executions/start-document-ingestion-execution.*`: execution bootstrap for the upload flow.
-- Create `src/tool-lab/markitdown/markitdown-tool-version.*`: pinned tool metadata and sandbox invocation contract.
-- Create `src/knowledge/document-ingestion/persist-converted-concept.*`: canonical persistence and supersession logic.
-- Create `src/knowledge/document-ingestion/document-ingestion-deletion.*`: original file and concept deletion path.
-- Create `tests/document-ingestion/*.test.*`: contract and behavior tests for accepted types, duplicate handling, failure modes, and deletion.
+- Create `src/interaction/document-upload/submit-document-source.mjs`: UI-facing command entry for a single local upload.
+- Create `src/orchestration/executions/start-document-ingestion-execution.mjs`: execution bootstrap for the upload flow.
+- Create `src/tool-lab/markitdown/markitdown-tool-version.mjs`: pinned tool metadata and sandbox invocation contract.
+- Create `src/knowledge/document-ingestion/persist-converted-concept.mjs`: canonical persistence and supersession logic.
+- Create `src/knowledge/document-ingestion/document-ingestion-deletion.mjs`: original file and concept deletion path.
+- Create `tests/document-ingestion/markitdown-tool-version.test.mjs`: contract tests for the tool boundary.
+- Create `tests/document-ingestion/submit-document-source.test.mjs`: accepted and rejected upload tests.
+- Create `tests/document-ingestion/start-document-ingestion-execution.test.mjs`: execution bootstrap tests.
+- Create `tests/document-ingestion/persist-converted-concept.test.mjs`: duplicate and supersession tests.
+- Create `tests/document-ingestion/document-ingestion-deletion.test.mjs`: deletion semantics tests.
+- Create `tests/document-ingestion/error-states.test.mjs`: failure-state and retry tests.
 
 ## Task 1: Lock The Published Language And Error Model
 
@@ -70,8 +75,8 @@ Expected: every approved decision appears once in the canonical issue artifacts 
 ## Task 2: Pin The MarkItDown Tool Boundary
 
 **Files:**
-- Create: `src/tool-lab/markitdown/markitdown-tool-version.*`
-- Create: `tests/document-ingestion/markitdown-tool-version.test.*`
+- Create: `src/tool-lab/markitdown/markitdown-tool-version.mjs`
+- Create: `tests/document-ingestion/markitdown-tool-version.test.mjs`
 
 - [ ] **Step 1: Write the failing tool-version test**
 
@@ -93,7 +98,7 @@ Create a test that asserts the MarkItDown tool metadata includes:
 Run:
 
 ```bash
-node --test tests/document-ingestion/markitdown-tool-version.test.*
+node --test tests/document-ingestion/markitdown-tool-version.test.mjs
 ```
 
 Expected: fail because the tool boundary module does not exist yet.
@@ -107,7 +112,7 @@ Create the smallest tool-version contract that records the exact source, read-on
 Run:
 
 ```bash
-node --test tests/document-ingestion/markitdown-tool-version.test.*
+node --test tests/document-ingestion/markitdown-tool-version.test.mjs
 ```
 
 Expected: pass.
@@ -115,10 +120,10 @@ Expected: pass.
 ## Task 3: Build The Single-File Ingestion Execution
 
 **Files:**
-- Create: `src/interaction/document-upload/submit-document-source.*`
-- Create: `src/orchestration/executions/start-document-ingestion-execution.*`
-- Create: `tests/document-ingestion/submit-document-source.test.*`
-- Create: `tests/document-ingestion/start-document-ingestion-execution.test.*`
+- Create: `src/interaction/document-upload/submit-document-source.mjs`
+- Create: `src/orchestration/executions/start-document-ingestion-execution.mjs`
+- Create: `tests/document-ingestion/submit-document-source.test.mjs`
+- Create: `tests/document-ingestion/start-document-ingestion-execution.test.mjs`
 
 - [ ] **Step 1: Write tests for accepted and rejected uploads**
 
@@ -145,8 +150,8 @@ assert.equal(command.requiresKnowledgeBundle, false);
 Run:
 
 ```bash
-node --test tests/document-ingestion/submit-document-source.test.*
-node --test tests/document-ingestion/start-document-ingestion-execution.test.*
+node --test tests/document-ingestion/submit-document-source.test.mjs
+node --test tests/document-ingestion/start-document-ingestion-execution.test.mjs
 ```
 
 Expected: fail because the upload and execution modules do not exist yet.
@@ -156,21 +161,19 @@ Expected: fail because the upload and execution modules do not exist yet.
 Add the smallest upload command and execution bootstrap that:
 
 ```js
-// pseudocode
-acceptsOneFileOnly();
-startsLocalOnlyExecution();
-routes to MarkItDown tool version;
-captures provenance;
-forwards the converted artifact to Knowledge;
+submitDocumentSource(filePath, provenance)
+startDocumentIngestionExecution({ filePath, provenance, knowledgeBundleId })
 ```
+
+The command should reject more than one file, mark the upload as local-only, call the pinned MarkItDown tool version, capture provenance, and forward the converted artifact to Knowledge.
 
 - [ ] **Step 4: Re-run the tests**
 
 Run:
 
 ```bash
-node --test tests/document-ingestion/submit-document-source.test.*
-node --test tests/document-ingestion/start-document-ingestion-execution.test.*
+node --test tests/document-ingestion/submit-document-source.test.mjs
+node --test tests/document-ingestion/start-document-ingestion-execution.test.mjs
 ```
 
 Expected: pass.
@@ -178,10 +181,10 @@ Expected: pass.
 ## Task 4: Persist Canonical Knowledge And Deletion Semantics
 
 **Files:**
-- Create: `src/knowledge/document-ingestion/persist-converted-concept.*`
-- Create: `src/knowledge/document-ingestion/document-ingestion-deletion.*`
-- Create: `tests/document-ingestion/persist-converted-concept.test.*`
-- Create: `tests/document-ingestion/document-ingestion-deletion.test.*`
+- Create: `src/knowledge/document-ingestion/persist-converted-concept.mjs`
+- Create: `src/knowledge/document-ingestion/document-ingestion-deletion.mjs`
+- Create: `tests/document-ingestion/persist-converted-concept.test.mjs`
+- Create: `tests/document-ingestion/document-ingestion-deletion.test.mjs`
 
 - [ ] **Step 1: Write duplicate and supersession tests**
 
@@ -214,8 +217,8 @@ deletes original quarantined input after success;
 Run:
 
 ```bash
-node --test tests/document-ingestion/persist-converted-concept.test.*
-node --test tests/document-ingestion/document-ingestion-deletion.test.*
+node --test tests/document-ingestion/persist-converted-concept.test.mjs
+node --test tests/document-ingestion/document-ingestion-deletion.test.mjs
 ```
 
 Expected: pass.
@@ -223,9 +226,9 @@ Expected: pass.
 ## Task 5: Add Failure States And Retry Resolution
 
 **Files:**
-- Create: `tests/document-ingestion/error-states.test.*`
-- Modify: `src/orchestration/executions/start-document-ingestion-execution.*`
-- Modify: `src/knowledge/document-ingestion/persist-converted-concept.*`
+- Create: `tests/document-ingestion/error-states.test.mjs`
+- Modify: `src/orchestration/executions/start-document-ingestion-execution.mjs`
+- Modify: `src/knowledge/document-ingestion/persist-converted-concept.mjs`
 
 - [ ] **Step 1: Write the failure-state tests**
 
@@ -243,7 +246,7 @@ assert.equal(renderFailure('retries-exhausted'), 'suspend');
 Run:
 
 ```bash
-node --test tests/document-ingestion/error-states.test.*
+node --test tests/document-ingestion/error-states.test.mjs
 ```
 
 Expected: fail until the state machine and rendered outcomes exist.
@@ -263,7 +266,7 @@ then execution suspension;
 Run:
 
 ```bash
-node --test tests/document-ingestion/error-states.test.*
+node --test tests/document-ingestion/error-states.test.mjs
 ```
 
 Expected: pass.
@@ -275,7 +278,7 @@ Expected: pass.
 - [ ] **Step 1: Run focused validation**
 
 ```bash
-node --test tests/document-ingestion/*.test.*
+node --test tests/document-ingestion/*.test.mjs
 git diff --check
 ```
 
