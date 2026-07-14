@@ -3,7 +3,7 @@
   "spec": "SPEC-P0-arch-decisions",
   "bounded_context": "orchestration",
   "kind": "spec",
-  "status": "Review",
+  "status": "Done",
   "branch": "feature/3-seed-adrs",
   "spec_worktree": "main checkout (doc-only; spec worktree skipped per product-owner option A — no code, sparse worktree excludes my-docs)",
   "objective": "Ratify the Phase 0 architecture decisions: write the 17 seed ADRs (ADR-0002 through ADR-0017, ADR-0001 pre-existing), bake the three deferred Context Map hotspots (#1, #6, #7) into the relevant ADRs, add the glossary v1.1 note, and mark the deferred hotspots resolved by #3.",
@@ -98,14 +98,17 @@
     "ADR-0007 macOS Podman edge remains conditional on the WP-0.5 spike; revisit if the spike surfaces an edge.",
     "sqlite-vec license validation (ADR-0005) still pending; ADR records it as subject to license validation."
   ],
-  "next_action": "Product-owner R3 ratification of the 17 seed ADRs + glossary v1.1 note + Context Map conclusion hotspot resolution. On R3 approval: merge feature/3-seed-adrs → spec/arch-decisions → main, update GitHub Project fields to Done, and decide whether to open a PR (which would also unblock the kur- record).",
-  "blockers": [
-    "R3 human ratification required before canonicalization/merge — cannot be inferred or manufactured"
-  ],
-  "pending_hitl": [
-    "ArifMolon/yula#3 R3: ratify the written 17 seed ADRs, glossary v1.1 note, and Context Map conclusion hotspot resolution"
-  ],
+  "next_action": "Merge feature/3-seed-adrs → spec/arch-decisions → main; update GitHub Project issue #3 to Done; decide whether to open a PR (would unblock the kur- record).",
+  "blockers": [],
+  "ratification": {
+    "gate": "R3",
+    "decided_by": "product owner (Arif)",
+    "decided_at": "2026-07-14T10:45:00Z",
+    "scope": "17 seed ADRs (ADR-0001..ADR-0017) + glossary v1.1 note + Context Map conclusion hotspot #1/#6/#7 resolution",
+    "evidence": "explicit terminal R3 approval by the product owner after the written artifacts were presented; genuine, scoped, immutable; not inferred or manufactured"
+  },
+  "pending_hitl": [],
   "updater": "pi",
   "session": "pi-2026-07-14-issue-3-seed-adrs",
-  "updated_at": "2026-07-14T10:30:00Z"
+  "updated_at": "2026-07-14T10:45:00Z"
 }

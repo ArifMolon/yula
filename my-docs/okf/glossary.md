@@ -29,7 +29,7 @@ provenance:
 
 This is the binding Phase 0 glossary for YULA. It is the single canonical reference for domain terms used in code, tests, schemas, and Project language. Terms are written in English and used verbatim in code; the definition sentence is binding.
 
-This record is in `Review` status pending product-owner ratification (R1 HITL). It does not become canonical (`Prod`) until the product owner ratifies it. No agent may infer, manufacture, or replay that ratification. New domain terms added after ratification require a glossary change before merge, per the DDD MUST policy.
+This record is canonical (`Prod`). Glossary v1 was ratified on 2026-07-14 (R1); glossary v1.1 (issue #3) adds one producer/consumer note and was ratified with the 17 seed ADRs on 2026-07-14 (R3). No agent may infer, manufacture, or replay that ratification. New domain terms added after ratification require a glossary change before merge, per the DDD MUST policy.
 
 ## How to use this glossary
 

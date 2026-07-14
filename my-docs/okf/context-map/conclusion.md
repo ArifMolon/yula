@@ -106,6 +106,8 @@ Issue #3 (`ArifMolon/yula#3` — Ratify the Phase 0 architecture decisions) has 
 
 This update does not reopen, contradict, or weaken any of the resolved hotspots above; it records their resolution by the named ADRs. The remaining deferred hotspots (#2–#5) were already resolved by the Ubiquitous Language freeze (issue #2, glossary v1).
 
+The issue #3 resolution recorded here was ratified by the product owner under R3 on 2026-07-14 as part of ratifying the 17 seed ADRs. No agent inferred or manufactured that ratification.
+
 ## Summary inventory
 
 - Total hotspots aggregated: 31 across four records (9 in #12, 8 in #13, 7 in #14, 7 in #15; the 7 deferred hotspots are shared between #14 and #15).
