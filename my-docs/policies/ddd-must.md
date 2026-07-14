@@ -2,7 +2,7 @@
 
 Domain-Driven Design is a merge-blocking rule for every YULA module, contract, test, schema, and domain-facing UI term.
 
-- Use the owning bounded context's Ubiquitous Language verbatim. A new domain term requires a glossary change before merge.
+- Use the owning bounded context's Ubiquitous Language verbatim. A new domain term requires a glossary change before merge (canonical glossary: `my-docs/okf/glossary.md`).
 - Commands express intent, domain events use past tense, and aggregate methods name domain transitions.
 - Contexts communicate only through Published Language, events, ports, or APIs; another context's internal model is private.
 - `Manager`, `Helper`, `Utils`, `CommonService`, `process`, `updateData`, and unrestricted `setStatus` are prohibited domain names.
