@@ -1,0 +1,91 @@
+{
+  "issue": "ArifMolon/yula#2",
+  "spec": "SPEC-P0-ubiquitous-language",
+  "bounded_context": "agent-studio",
+  "kind": "capability",
+  "status": "Done",
+  "branch": "feature/2-freeze-glossary",
+  "spec_worktree": ".worktrees/spec-ubiquitous-language",
+  "objective": "Freeze the binding Phase 0 Ubiquitous Language as a canonical glossary covering all twelve bounded-context names and Phase 0 seed terms, resolvable by the DDD MUST validator, and resolving the four naming hotspots deferred from issue #16.",
+  "ubiquitous_language": [
+    "Ubiquitous Language",
+    "Glossary",
+    "Published Language",
+    "AgentDefinition",
+    "AgentVersion",
+    "Skill",
+    "ToolVersion",
+    "Execution",
+    "EvaluationArtifactSnapshot",
+    "ConversionArtifact",
+    "IndexState",
+    "KnowledgeSource",
+    "KnowledgeWriter",
+    "Provenance",
+    "RiskLevel"
+  ],
+  "invariants": [
+    "Each term has one context-owned binding definition.",
+    "A new domain term requires a glossary change before merge.",
+    "Numeric-only context names are excluded from daily work; the twelve full names are binding.",
+    "No runtime RiskLevel is inferred from GitHub Project Risk.",
+    "Ratification is R1 human-required; no agent may infer, manufacture, or replay the product-owner decision."
+  ],
+  "decisions": [
+    "Product owner chose spec worktree (option A): spec/ubiquitous-language + feature/2-freeze-glossary at .worktrees/spec-ubiquitous-language, because #2 produces a permanent test and worktree policy assigns code to code worktrees.",
+    "Product owner chose glossary path (option A): my-docs/okf/glossary.md as a new OKF artifact type alongside concepts, handoffs, and event-storming.",
+    "Product owner chose scope (option A): seed terms from plan §3.2 + 12 bounded-context names + the 4 naming hotspots deferred from #16.",
+    "EvaluationArtifactSnapshot is the canonical Phase 0 name for the Tool Lab -> Knowledge evaluation-artifact contract (resolves deferred hotspot #2).",
+    "ConversionArtifact is the canonical Phase 0 name for the MarkItDown ToolVersion -> Knowledge document-conversion contract (resolves deferred hotspot #2 conversion variant).",
+    "IndexState canonical names are current, pending, degraded (resolves deferred hotspot #5).",
+    "Provenance minimum schema is binding at Phase 0: source identity, acquisition time, content digest, ToolVersion identity, EvaluationRun identity or conversion time, transcript source/confidence where applicable, and Execution/Trace references.",
+    "Meaningfully changed Phase 0 binding: any curated Concept content-hash change beyond exact equality triggers Supersession; a narrower semantic threshold may be refined in tactical design but cannot weaken this default.",
+    "Terms out of scope for v1 and owned by issue #3 or later tactical design: runtime RiskLevel assignment policy; direct Published Language vs Integration ACL route; OKF/Git partial-failure recovery protocol.",
+    "Tool vs Skill boundary is closed by this glossary: both ToolVersion and SkillVersion are binding and distinct; a repository packages itself as a skill but an executable pipeline is evaluated as a ToolVersion candidate."
+  ],
+  "implementation_state": "Glossary v1 ratified by the product owner on 2026-07-14 and moved to Prod. The record at my-docs/okf/glossary.md defines 12 bounded contexts, ~40 seed terms from plan §3.2, and resolves the 4 naming hotspots deferred from issue #16 (EvaluationArtifactSnapshot, ConversionArtifact, IndexState names, minimum provenance schema, meaningfully-changed threshold). ddd-must.md references the canonical glossary; a glossary coverage test asserts all 12 contexts and key terms. The slice is on branch feature/2-freeze-glossary in the spec-ubiquitous-language worktree (758b7d4) and will be merged to spec then main. No code changed beyond the OKF glossary, the ddd-must policy reference, and the test. Issue #2 exit criteria are satisfied: Glossary v1 covers Phase 0 terms and all twelve context names; the DDD MUST validator references the canonical glossary.",
+  "changed_code": [
+    "my-docs/okf/glossary.md"
+  ],
+  "verification": [
+    {
+      "command": "node --test tests/*.test.mjs (main checkout with feature files applied)",
+      "result": "tests 65; pass 65; fail 0; cancelled 0; skipped 0; todo 0",
+      "observed_at": "2026-07-14T08:30:00Z"
+    },
+    {
+      "command": "node scripts/validate-operating-model.mjs",
+      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review.",
+      "observed_at": "2026-07-14T08:30:00Z"
+    },
+    {
+      "command": "git diff --check (worktree)",
+      "result": "clean: no whitespace errors",
+      "observed_at": "2026-07-14T08:30:00Z"
+    },
+    {
+      "command": "manual structural schema validation of my-docs/okf/handoffs/issue-2.json against schemas/handoff-brief.schema.json",
+      "result": "PASS: HandoffBrief conforms to schema (required, additionalProperties, enums, arrays, verification entries)",
+      "observed_at": "2026-07-14T08:30:00Z"
+    },
+    {
+      "command": "node --test tests/operating-model.test.mjs (glossary coverage test)",
+      "result": "PASS: glossary covers all 12 contextNames and key terms (AgentVersion, ToolVersion, Execution, Task, KnowledgeWriter, EvaluationArtifactSnapshot, ConversionArtifact, IndexState, Provenance)",
+      "observed_at": "2026-07-14T08:30:00Z"
+    }
+  ],
+  "active_lessons": [
+    "lesson-delivery-patterns-are-not-domain-language"
+  ],
+  "open_loops": [
+    "Deferred hotspot ownership for #1 (runtime RiskLevel), #6 (direct vs ACL route), and #7 (OKF/Git recovery) remains with issue #3.",
+    "Glossary v1 is Phase-0-bound; Phase 1 terms (concrete Workflow node types, connector contracts) are added via glossary change before their merge.",
+    "Issue #2 was implemented in a spec worktree (.worktrees/spec-ubiquitous-language) because it produces a permanent test and a policy edit, unlike #16 which was OKF-only."
+  ],
+  "next_action": "Issue #2 is Done. Merge feature/2-freeze-glossary into spec/ubiquitous-language, then merge spec into main, push, move #2 to Done on the Project, and clean up the spec worktree. The next Faz 0 issue is ArifMolon/yula#3 (Ratify Phase 0 architecture ADRs), which owns the remaining deferred hotspots #1, #6, and #7.",
+  "blockers": [],
+  "pending_hitl": [],
+  "updater": "pi",
+  "session": "pi-2026-07-14-issue-2-freeze-glossary",
+  "updated_at": "2026-07-14T08:30:00Z"
+}

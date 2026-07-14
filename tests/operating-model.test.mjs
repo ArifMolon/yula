@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { access, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { contextSlugs as contexts } from '../scripts/domain-catalog.mjs';
+import { contextSlugs as contexts, contextNames } from '../scripts/domain-catalog.mjs';
 import { resolveCanonicalRoot } from '../scripts/repository-paths.mjs';
 
 const repositoryRoot = path.resolve(import.meta.dirname, '..');
@@ -58,6 +58,7 @@ test('policies codify DDD, HITL, voice, and worktree boundaries', async () => {
     assert.match(ddd, new RegExp(`\\b${name}\\b`));
   }
   assert.match(ddd, /glossary change before merge/i);
+  assert.match(ddd, /my-docs\/okf\/glossary\.md/i);
 
   const hitl = await readFile(canonicalFile('my-docs/policies/hitl.md'), 'utf8');
   assert.match(hitl, /R3 and R4 always require human approval/i);
@@ -72,6 +73,15 @@ test('policies codify DDD, HITL, voice, and worktree boundaries', async () => {
   assert.match(boundaries, /mutable shared `node_modules`.*prohibited/i);
 
   await Promise.all(contexts.map(context => access(canonicalFile(`my-docs/okf/contexts/${context}/lessons/.gitkeep`))));
+});
+
+test('the canonical glossary covers all twelve bounded contexts and Phase 0 terms', async () => {
+  const glossary = await readFile(canonicalFile('my-docs/okf/glossary.md'), 'utf8');
+  for (const name of contextNames) assert.match(glossary, new RegExp(`\\b${name.replace(/&/g, '\\&')}\\b`), `glossary names ${name}`);
+  for (const term of ['AgentVersion', 'ToolVersion', 'Execution', 'Task', 'KnowledgeWriter', 'Published Language', 'EvaluationArtifactSnapshot', 'ConversionArtifact', 'IndexState', 'Provenance']) {
+    assert.match(glossary, new RegExp(`\\b${term}\\b`), `glossary defines ${term}`);
+  }
+  assert.match(glossary, /\bcurrent\b.*\bpending\b.*\bdegraded\b/s);
 });
 
 test('operating model validator reports no contract errors', async () => {
