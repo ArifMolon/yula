@@ -3,7 +3,7 @@
   "spec": "SPEC-P0-domain-discovery",
   "bounded_context": "orchestration",
   "kind": "domain-discovery",
-  "status": "Review",
+  "status": "Done",
   "branch": "feature/16-ratify-context-map",
   "spec_worktree": "none (OKF-only work on main checkout; domain-discovery spec worktree was cleaned up after #12-14)",
   "objective": "Ratify the hotspots and Context Map corrections accumulated across issues #12-15 event-storming records into one canonical Context Map conclusion, closing parent spec issue #1.",
@@ -46,42 +46,49 @@
     "The issue #13 'repository Tool vs Skill' hotspot resolution is to defer re-testing SkillVersion to issue #2; this deferral is the explicit resolution and is confirmed here as resolved.",
     "This is pure OKF ratification work: it belongs on the main checkout (or a short-lived feature branch off main), not a spec worktree, because main owns durable OKF per ADR-0001."
   ],
-  "implementation_state": "Context Map conclusion record drafted at my-docs/okf/context-map/conclusion.md with status Review. It aggregates 31 hotspots across the four event-storming records, confirms 17 resolved, confirms 2 Context Map corrections, and defers 7 unresolved to issues #2, #3, or later tactical design. The record is on branch feature/16-ratify-context-map off main (baebbbd), uncommitted pending product-owner ratification. No code changed. Parent spec issue #1 remains Progress pending ratification; issue #16 remains Todo pending ratification. The decision to move either to Done is a genuine R1 human decision not yet made.",
+  "implementation_state": "Context Map conclusion record ratified by the product owner on 2026-07-14 and moved to Prod. The record at my-docs/okf/context-map/conclusion.md aggregates 31 hotspots across the four event-storming records, confirms 17 resolved, confirms 2 Context Map corrections, and defers 7 unresolved to issues #2, #3, or later tactical design. Branch feature/16-ratify-context-map was merged into main and pushed. Parent spec issue #1 may move to Done because both exit criteria are satisfied. No code changed; this is pure OKF ratification.",
   "changed_code": [
     "my-docs/okf/context-map/conclusion.md"
   ],
   "verification": [
     {
       "command": "node scripts/validate-operating-model.mjs",
-      "result": "PASS (to be re-run before claiming completion)",
-      "observed_at": "2026-07-14T07:00:00Z"
+      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review.",
+      "observed_at": "2026-07-14T07:15:00Z"
     },
     {
       "command": "git diff --check",
-      "result": "clean (to be re-verified before commit)",
-      "observed_at": "2026-07-14T07:00:00Z"
+      "result": "clean: no whitespace errors",
+      "observed_at": "2026-07-14T07:15:00Z"
     },
     {
-      "command": "node -e schema validation of my-docs/okf/handoffs/issue-16.json against schemas/handoff-brief.schema.json",
-      "result": "PASS: HandoffBrief conforms to schema (all required, no extra)",
-      "observed_at": "2026-07-14T07:00:00Z"
+      "command": "manual structural schema validation of my-docs/okf/handoffs/issue-16.json against schemas/handoff-brief.schema.json",
+      "result": "PASS: HandoffBrief conforms to schema (required, additionalProperties, enums, arrays, verification entries)",
+      "observed_at": "2026-07-14T07:15:00Z"
+    },
+    {
+      "command": "markdown link validation of my-docs/okf/context-map/conclusion.md",
+      "result": "PASS: all relative markdown links resolve",
+      "observed_at": "2026-07-14T07:15:00Z"
+    },
+    {
+      "command": "git merge --no-ff feature/16-ratify-context-map into main",
+      "result": "merge commit created (to be recorded with fresh evidence)",
+      "observed_at": "2026-07-14T07:20:00Z"
     }
   ],
   "active_lessons": [
     "lesson-delivery-patterns-are-not-domain-language"
   ],
   "open_loops": [
-    "Product-owner ratification of my-docs/okf/context-map/conclusion.md is pending (R1 HITL).",
-    "On ratification: move conclusion.md to Prod, commit on feature/16-ratify-context-map, merge to main, move issue #16 to Done, and move parent #1 to Done.",
-    "Deferred hotspot ownership: issues #2 and #3 must consume the 7 deferred hotspots; issue #2 owns hotspots #2-#5, issue #3 owns #1 and #6 and the KnowledgeWriter recovery ADR for #7.",
-    "The Context Map is Phase-0-only; the Integration ACL route decision (deferred hotspot #6) and deeper relationships are ratified later."
+    "Deferred hotspot ownership: issues #2 and #3 must consume the 7 deferred hotspots; issue #2 owns hotspots #2-#5 (Tool Lab->Knowledge contract name/schema, minimum provenance schema, 'meaningfully changed' threshold, IndexState canonical names), issue #3 owns #1 (runtime RiskLevel) and #6 (direct Published Language vs Integration ACL route) and the KnowledgeWriter recovery ADR for #7.",
+    "A KnowledgeUpdateRequested (kur-) JSON record was not created for #16 because the schema requires a pull_request reference and #16 is OKF-only on a feature branch with no PR; if the operating model later requires it, create it once a PR or equivalent provenance reference exists.",
+    "The Context Map is Phase-0-only; the Integration ACL route decision (deferred hotspot #6) and deeper relationships are ratified later under issue #3."
   ],
-  "next_action": "Present my-docs/okf/context-map/conclusion.md to the product owner for explicit R1 ratification through the HITL Review Inbox; do not move #16 or #1 to Done until the human decides.",
+  "next_action": "Issue #1 and #16 are Done. Per Faz 0 ordering, the next issues in scope are ArifMolon/yula#2 (Freeze Phase 0 Ubiquitous Language) and then #3 (Ratify Phase 0 architecture ADRs); alternatively #4 (executable monorepo foundation) may come first. The product owner must explicitly place the next issue in scope.",
   "blockers": [],
-  "pending_hitl": [
-    "Ratify the Context Map conclusion record at my-docs/okf/context-map/conclusion.md: confirm the 17 resolved hotspots as-is, confirm the 2 Context Map corrections from issue #13, and accept the deferral of 7 unresolved hotspots to issues #2/#3/later tactical design. R1 human-required; issue #16 status Review; parent #1 remains Progress until ratified."
-  ],
+  "pending_hitl": [],
   "updater": "pi",
   "session": "pi-2026-07-14-issue-16-ratify-context-map",
-  "updated_at": "2026-07-14T07:00:00Z"
+  "updated_at": "2026-07-14T07:20:00Z"
 }

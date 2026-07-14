@@ -3,8 +3,9 @@ type: context-map-conclusion
 issue: ArifMolon/yula#16
 spec: SPEC-P0-domain-discovery
 bounded_context: orchestration
-status: Review
+status: Prod
 product_owner: Arif
+ratified_at: 2026-07-14T07:15:00Z
 session: pi-2026-07-14-issue-16-ratify-context-map
 recorded_at: 2026-07-14T07:00:00Z
 provenance:
@@ -165,15 +166,13 @@ Upon product-owner ratification of this record, parent spec issue #1 (`[Spec] Va
 1. Domain flows for task execution, tool onboarding, knowledge ingestion, and MarkItDown document ingestion were validated and accepted as event-storming records (issues #12–15).
 2. This Context Map conclusion record aggregates all hotspots, confirms resolved ones, explicitly defers unresolved ones to named later issues, and confirms the two issue-#13 Context Map corrections — satisfying exit criterion #2.
 
-## Product-owner review (pending)
+## Product-owner review (ratified)
 
-This record is presented for product-owner ratification. The outcome is recorded only when the product owner decides through the HITL Review Inbox. Until then this record remains in `Review`; it is not canonical and issue #16 and parent #1 do not move to Done.
+This record was presented to the product owner and explicitly ratified on 2026-07-14 through the HITL Review Inbox. No changes were requested. Ratification is a genuine, scoped R1 human decision; it was not inferred, manufactured, or replayed by any agent.
 
-Issue #16 may move to Done only when all of the following are true:
+The ratification confirms:
+- 17 resolved hotspots (9 from #12, 8 from #13) as-is.
+- The 2 Context Map corrections from #13 (Tool Lab GitHub access boundary; Orchestration grade-check skip with stale-use risk recorded).
+- Deferral of 7 unresolved hotspots to issue #2, issue #3, and later tactical design as recorded above.
 
-1. The product owner explicitly ratifies this written record, or requested changes are incorporated and reviewed again.
-2. Every hotspot is classified as resolved, deferred to a named later issue, or recorded as a confirmed Context Map correction.
-3. The two issue-#13 Context Map corrections remain explicit.
-4. No runtime `RiskLevel` is inferred from GitHub Project `Risk`.
-5. Repository operating-model validation, Markdown-link validation, and `git diff --check` pass with fresh evidence.
-6. The HandoffBrief records the ratification outcome, verification evidence, open loops, and exactly one next action.
+Upon ratification, parent spec issue #1 (`[Spec] Validate YULA domain flows and Context Map`) may move to Done because both exit criteria are now satisfied: the four domain flows were validated (issues #12-15) and this Context Map conclusion record aggregates and ratifies all hotspots and corrections.
