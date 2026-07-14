@@ -1,3 +1,4 @@
 .superpowers/
 .worktrees/
 my-docs/.local/
+.npmrc
