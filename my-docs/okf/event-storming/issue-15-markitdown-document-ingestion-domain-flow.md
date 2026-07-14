@@ -3,10 +3,11 @@ type: event-storming
 issue: ArifMolon/yula#15
 spec: SPEC-P0-document-ingestion
 bounded_context: tool-lab
-status: Progress
+status: Prod
 product_owner: Arif
 session: pi-2026-07-14-issue-15-markitdown-ingestion
 recorded_at: 2026-07-14T05:30:00Z
+accepted_at: 2026-07-14T06:00:00Z
 provenance:
   - product-owner conversational design session on 2026-07-14 (handoff /tmp/yula-matt-handoff-2026-07-14-markitdown-document-ingestion.md)
   - my-docs/plan/YULA_DDD_Proje_Plani.md
@@ -220,7 +221,7 @@ The implementation must prove at least these scenarios without real provider or 
 
 **Conversational review outcome:** The product owner approved the minimum accepted file types, local-only boundary, single-file upload, optional KnowledgeBundle, one-command conversion-and-persistence, idempotent duplicates, supersession, fail-closed encrypted/corrupted handling, degraded OCR scans, quarantined-file deletion, and the retry policy on 2026-07-14.
 
-**Written-record review outcome:** Pending product-owner acceptance of this written record.
+**Written-record review outcome:** Explicitly accepted by the product owner on 2026-07-14 without requested changes.
 
 Issue #15 may move to Review only when all of the following are true:
 
