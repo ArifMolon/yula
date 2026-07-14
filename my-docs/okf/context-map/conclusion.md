@@ -84,15 +84,29 @@ These hotspots were explicitly deferred by their originating records. This concl
 
 | # | Hotspot (issue #14 and #15 share these) | Deferred to |
 |---:|---|---|
-| 1 | What runtime `RiskLevel` applies to knowledge/document ingestion? (Do not infer from Project Risk.) | `ArifMolon/yula#3` (architecture ADRs) and Approval & Security tactical design. |
+| 1 | What runtime `RiskLevel` applies to knowledge/document ingestion? (Do not infer from Project Risk.) | `ArifMolon/yula#3` — **resolved by ADR-0006**. |
 | 2 | Exact Tool Lab → Knowledge contract name and schema (`EvaluationArtifactSnapshot` / `Conversion artifact` are candidates). | `ArifMolon/yula#2` (Ubiquitous Language freeze). |
 | 3 | Minimum provenance schema (reusable fields across artifact/document ingestion). | `ArifMolon/yula#2` (Ubiquitous Language freeze) and tactical design. |
 | 4 | "Meaningfully changed" semantic threshold (exact hash equality is deterministic; semantic supersession threshold and human escalation are not). | `ArifMolon/yula#2` (Ubiquitous Language freeze) and tactical design. |
 | 5 | `IndexState` canonical names (current/pending/degraded used descriptively). | `ArifMolon/yula#2` (Ubiquitous Language freeze). |
-| 6 | Direct Published Language vs Integration ACL route for Tool Lab → Knowledge. | `ArifMolon/yula#3` (architecture ADRs) and Context Map tactical design. |
-| 7 | OKF file write and Git commit recovery across a partial failure (KnowledgeWriter serializes and blocks conflicting writes; the precise recovery protocol is not one database transaction). | Later tactical design / a dedicated KnowledgeWriter recovery ADR under issue #3's scope (architecture ADRs). |
+| 6 | Direct Published Language vs Integration ACL route for Tool Lab → Knowledge. | `ArifMolon/yula#3` — **resolved by ADR-0017** (direct Published Language route). |
+| 7 | OKF file write and Git commit recovery across a partial failure (KnowledgeWriter serializes and blocks conflicting writes; the precise recovery protocol is not one database transaction). | `ArifMolon/yula#3` — **resolved by ADR-0015**. |
 
 Hotspot #7 appears in both the issue #14 and issue #15 hotspot tables. It is recorded here once and deferred to the same named destination so that no hotspot is left unclassified, satisfying the conclusion invariant.
+
+## Issue #3 resolution (architecture ADRs)
+
+Issue #3 (`ArifMolon/yula#3` — Ratify the Phase 0 architecture decisions) has resolved the three deferred hotspots owned by it, ratifying the seed ADRs recorded under `my-docs/adr/`:
+
+| # | Deferred hotspot | Resolved by |
+|---:|---|---|
+| 1 | Runtime `RiskLevel` for knowledge/document ingestion | ADR-0006 (ingestion R2; credential/external R3; Approval & Security owns and applies policy; Orchestration intent-only) |
+| 6 | Direct Published Language vs Integration ACL route for Tool Lab → Knowledge | ADR-0017 (direct Published Language route; Tool Lab publishes, Knowledge consumes) |
+| 7 | OKF file write and Git commit partial-failure recovery | ADR-0015 (Git commit is the sole durable fence; only the Concept-write order file→commit is fenced; index rebuild out of fence; external side-effect out of scope) |
+
+This update does not reopen, contradict, or weaken any of the resolved hotspots above; it records their resolution by the named ADRs. The remaining deferred hotspots (#2–#5) were already resolved by the Ubiquitous Language freeze (issue #2, glossary v1).
+
+The issue #3 resolution recorded here was ratified by the product owner under R3 on 2026-07-14 as part of ratifying the 17 seed ADRs. No agent inferred or manufactured that ratification.
 
 ## Summary inventory
 

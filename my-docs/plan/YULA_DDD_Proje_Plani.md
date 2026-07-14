@@ -475,7 +475,7 @@ Her faz mini-DDD döngüsüdür (§2): storming → tasarım güncellemesi → t
 |---|---|---|
 | WP-0.1 Event Storming | Tüm ana akışlar (görev verme→onay→sonuç; tool onboarding; bilgi ingest) storming'le çıkarılır | `knowledge/design/event-storming/faz0.md` + hotspot listesi |
 | WP-0.2 Sözlük dondurma | §3.2 sözlüğü tamamlanır ve dondurulur | `glossary.md` v1; agentlar için lint referansı |
-| WP-0.3 Seed ADR'ler | §11 listesi yazılır | ADR-0001…0012 merge |
+| WP-0.3 Seed ADR'ler | §11 listesi yazılır | ADR-0001…0017 merge |
 | WP-0.4 Monorepo iskeleti | §8.1 yapısı + CI (macOS arm64 birincil; Win/Linux build smoke) | Boş uçtan uca build yeşil |
 | WP-0.5 Teknik spike'lar | Tauri→Elixir sidecar başlatma; Port üstünden 2 Rust worker paralel + token streaming + cancellation; SQLite event kaydı; **Podman machine üzerinde ephemeral sandbox koşumu (macOS)**; sqlite-vec + FTS5 hibrit sorgu POC; basit provider adaptörü + bir local model çağrısı | Worker crash'i Core/UI'yi düşürmüyor; execution state kurtarılıyor; sandbox non-root + network=none doğrulanmış |
 
@@ -665,6 +665,7 @@ Zorunlu Kubernetes · marketplace/üçüncü taraf yayınlama · agent başına 
 | ADR-0014 | Ses: push-to-talk + yerel STT önce; wake-word ayrı gizlilik tasarımıyla Faz 5+ |
 | ADR-0015 | Knowledge write ownership: tek Core KnowledgeWriter, WAL ile concurrent read + serialized write; execution scratch memory geçici; kalıcı agent micro-brain yok |
 | ADR-0016 | Ingestion tool qualification: Crawl4AI ve MarkItDown quarantined aday; yalnız değerlendirilmiş Web/Document Ingestion Skill üzerinden dar capability ile bağlanır |
+| ADR-0017 | Tool Lab → Knowledge route: doğrudan Published Language yolu (Integration ACL değil); Tool Lab yayıncı / Knowledge tüketici; Orchestration promotion Command referans taşır, payload değil (issue #3, hotspot #6) |
 
 ---
 

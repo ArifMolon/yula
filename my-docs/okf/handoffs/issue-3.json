@@ -1,0 +1,114 @@
+{
+  "issue": "ArifMolon/yula#3",
+  "spec": "SPEC-P0-arch-decisions",
+  "bounded_context": "orchestration",
+  "kind": "spec",
+  "status": "Done",
+  "branch": "feature/3-seed-adrs",
+  "spec_worktree": "main checkout (doc-only; spec worktree skipped per product-owner option A — no code, sparse worktree excludes my-docs)",
+  "objective": "Ratify the Phase 0 architecture decisions: write the 17 seed ADRs (ADR-0002 through ADR-0017, ADR-0001 pre-existing), bake the three deferred Context Map hotspots (#1, #6, #7) into the relevant ADRs, add the glossary v1.1 note, and mark the deferred hotspots resolved by #3.",
+  "ubiquitous_language": [
+    "KnowledgeWriter",
+    "RiskLevel",
+    "CapabilityGrant",
+    "ApprovalRequest",
+    "AuditEvent",
+    "EvaluationArtifactSnapshot",
+    "ConversionArtifact",
+    "Published Language",
+    "Concept",
+    "Provenance",
+    "ContainerRuntimePort",
+    "PromptVersion",
+    "KnowledgePromotion"
+  ],
+  "invariants": [
+    "ADRs are single-decision records; the design vision is not stuffed into ADR-0013 (it has its own design-direction pointer doc).",
+    "Hotspot A/C extend existing seed ADRs ADR-0006/0015 (DRY); only Hotspot B gets a new ADR (ADR-0017).",
+    "Approval & Security owns and applies the risk policy; Orchestration only sends intent.",
+    "The Git commit is the sole durable fence, covering only the Concept-write order (file then commit); index rebuild and external side-effects are out of scope of that fence.",
+    "Glossary v1.1 adds a note only; no term is moved between bounded-context columns.",
+    "No runtime RiskLevel is inferred from GitHub Project Risk.",
+    "R3 human ratification is required to canonicalize #3; the grilling verbal ratification of the decision grid is not the formal issue-level R3 gate."
+  ],
+  "decisions": [
+    "16 new ADRs written (ADR-0002..ADR-0017) plus the pre-existing ADR-0001 — full WP-0.3 seed ADR set of 17.",
+    "ADR-0006 resolves hotspot #1: ingestion of local OKF canonical record + derived index is R2 (not R1); credential/external ingestion is R3 as a separate row; Approval & Security owns AND applies the policy; Orchestration sends intent only.",
+    "ADR-0015 resolves hotspot #7: the Git commit is the sole durable fence, covering only the Concept-write order (file then commit); a pre-commit crash writes nothing; index rebuild is out of the fence (rebuildable); external side-effects are out of scope (separate R3 + rule); KnowledgeWriter lives in Elixir Core.",
+    "ADR-0017 resolves hotspot #6: direct Published Language route (not Integration ACL); Tool Lab publishes, Knowledge consumes; Orchestration promotion Command carries a reference, not a payload.",
+    "ADR-0007 keeps the macOS Podman edge decisive but conditioned on WP-0.5 spike validation; revise only if an edge arises.",
+    "ADR-0013 stays StyleX-only; the product design vision (Japon minimalism, mockups, Design System, Agent Characters, Skill Icons, visual approval loop) is pointed to by my-docs/plan/2026-07-14-yula-design-direction.md for later Faz 1 drafting.",
+    "Glossary v1 → v1.1: one note added under EvaluationArtifactSnapshot and ConversionArtifact (shared Published Language; Tool Lab publishes, Knowledge consumes); no term moved.",
+    "Context Map conclusion hotspots #1, #6, #7 marked resolved by ADR-0006, ADR-0017, ADR-0015 respectively; a #3 resolution section added.",
+    "Plan §11 grows 16 → 17 ADRs (ADR-0017 row added); WP-0.3 acceptance criterion updated to ADR-0001…0017; plan.html dashboard and verify-plan-html.mjs synchronized to 17 ADRs."
+  ],
+  "implementation_state": "All 16 new ADR files written under my-docs/adr/ (ADR-0002 through ADR-0017), compact single-decision records in the ADR-0001 format with Status/Date/Provenance/Decision/Consequences. The three deferred Context Map hotspots (#1 risk assignment, #6 Tool Lab→Knowledge route, #7 KnowledgeWriter recovery) are baked into ADR-0006, ADR-0017, and ADR-0015 respectively. Glossary bumped to v1.1 with a single producer/consumer note and the three out-of-scope items marked resolved-by-ADR. Context Map conclusion updated with resolved-by pointers and an issue-#3 resolution section. Plan §11 and the WP-0.3 acceptance criterion updated to 17 ADRs; the plan.html dashboard and verify-plan-html.mjs synchronized. A design-direction pointer doc created for the Faz 1 product design vision so ADR-0013 stays StyleX-only. All written on branch feature/3-seed-adrs in the main checkout (spec worktree skipped — #3 is doc-only and the sparse worktree excludes my-docs). Not yet merged; awaiting product-owner R3 ratification.",
+  "changed_code": [
+    "my-docs/adr/0002-elixir-rust-ipc.md",
+    "my-docs/adr/0003-agent-model-and-runtime.md",
+    "my-docs/adr/0004-information-architecture.md",
+    "my-docs/adr/0005-vector-search.md",
+    "my-docs/adr/0006-security-and-risk-policy.md",
+    "my-docs/adr/0007-container-runtime.md",
+    "my-docs/adr/0008-model-gateway-contract.md",
+    "my-docs/adr/0009-prompt-profile.md",
+    "my-docs/adr/0010-self-evolution-limit.md",
+    "my-docs/adr/0011-test-discipline.md",
+    "my-docs/adr/0012-platform-order.md",
+    "my-docs/adr/0013-ui-style-layer.md",
+    "my-docs/adr/0014-voice.md",
+    "my-docs/adr/0015-knowledge-write-ownership.md",
+    "my-docs/adr/0016-ingestion-tool-qualification.md",
+    "my-docs/adr/0017-tool-lab-to-knowledge-route.md",
+    "my-docs/plan/2026-07-14-yula-design-direction.md",
+    "my-docs/okf/glossary.md",
+    "my-docs/okf/context-map/conclusion.md",
+    "my-docs/plan/YULA_DDD_Proje_Plani.md",
+    "my-docs/plan/plan.html",
+    "scripts/verify-plan-html.mjs"
+  ],
+  "verification": [
+    {
+      "command": "node scripts/validate-operating-model.mjs",
+      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review.",
+      "observed_at": "2026-07-14T10:30:00Z"
+    },
+    {
+      "command": "node --test tests/*.test.mjs",
+      "result": "tests 65; pass 65; fail 0; cancelled 0; skipped 0; todo 0",
+      "observed_at": "2026-07-14T10:30:00Z"
+    },
+    {
+      "command": "node scripts/verify-plan-html.mjs",
+      "result": "PASS: 47 sozlesme kontrolu, 3 uzak-kaynak kontrolu (17 ADR).",
+      "observed_at": "2026-07-14T10:30:00Z"
+    },
+    {
+      "command": "git diff --check",
+      "result": "clean (no whitespace errors)",
+      "observed_at": "2026-07-14T10:30:00Z"
+    }
+  ],
+  "active_lessons": [
+    "lesson-retry-without-reading-error (orchestration, Candidate) — still Candidate; #3 produced no new retry evidence"
+  ],
+  "open_loops": [
+    "KnowledgeUpdateRequested (kur-) JSON not created for #3: schema requires pull_request (minLength 1) and doc-only work has no PR yet; same gap as #2/#16. Either a PR is opened for #3 or the schema is relaxed in a separate operating-model issue.",
+    "The full Faz 1 design-direction document is only a pointer now; drafting belongs to a later Faz 1 Desktop Alpha task.",
+    "ADR-0007 macOS Podman edge remains conditional on the WP-0.5 spike; revisit if the spike surfaces an edge.",
+    "sqlite-vec license validation (ADR-0005) still pending; ADR records it as subject to license validation."
+  ],
+  "next_action": "Merge feature/3-seed-adrs → spec/arch-decisions → main; update GitHub Project issue #3 to Done; decide whether to open a PR (would unblock the kur- record).",
+  "blockers": [],
+  "ratification": {
+    "gate": "R3",
+    "decided_by": "product owner (Arif)",
+    "decided_at": "2026-07-14T10:45:00Z",
+    "scope": "17 seed ADRs (ADR-0001..ADR-0017) + glossary v1.1 note + Context Map conclusion hotspot #1/#6/#7 resolution",
+    "evidence": "explicit terminal R3 approval by the product owner after the written artifacts were presented; genuine, scoped, immutable; not inferred or manufactured"
+  },
+  "pending_hitl": [],
+  "updater": "pi",
+  "session": "pi-2026-07-14-issue-3-seed-adrs",
+  "updated_at": "2026-07-14T10:45:00Z"
+}
