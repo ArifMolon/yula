@@ -7,11 +7,14 @@ lifecycle: Candidate
 provenance:
   - pi-session-2026-07-14-issue-2-glossary-graphql-syntax-errors
   - pi-session-2026-07-14-issue-16-project-status-query-syntax-errors
+  - pi-session-2026-07-14-issue-3-seed-adrs-handoff-vs-disk-mismatch
 prevention_guidance: When a tool call fails with a syntax or contract error (GraphQL parse error, wrong working directory, schema mismatch), stop and read the full error message before retrying. Do not re-send the same payload with cosmetic changes. Identify the exact cause, fix it once, and verify the fix against the error before the next attempt. Repeated identical-failure retries waste tokens and signal that the error was not understood.
 confidence: 0.85
 validation_evidence:
   - 2026-07-14 issue #16: sent a GitHub Projects v2 GraphQL query with malformed brace nesting; got "Expected one of SCHEMA..." parse error; re-sent a near-identical query and got the same error before fixing the nesting.
   - 2026-07-14 issue #2: re-sent the same malformed query structure a second time after the first JSON decode failure, instead of reading the GraphQL parse error in the raw output.
+  - 2026-07-14 issue #3: proceeded on the handoff's "extend ADR-0006/0015" wording without first listing my-docs/adr/; the ADRs did not exist and the work had to be re-scoped. A single `ls my-docs/adr/` before planning would have shown only ADR-0001 was written.
+  - 2026-07-14 issue #3: bootstrapped a spec worktree for a doc-only spec before confirming the worktree could hold the deliverables; the sparse exclusion of my-docs made it unusable. A dry-run write test would have surfaced this before the worktree was created.
 operations:
   - run-tool-call
   - diagnose-failure
