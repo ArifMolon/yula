@@ -1,0 +1,87 @@
+{
+  "issue": "ArifMolon/yula#16",
+  "spec": "SPEC-P0-domain-discovery",
+  "bounded_context": "orchestration",
+  "kind": "domain-discovery",
+  "status": "Review",
+  "branch": "feature/16-ratify-context-map",
+  "spec_worktree": "none (OKF-only work on main checkout; domain-discovery spec worktree was cleaned up after #12-14)",
+  "objective": "Ratify the hotspots and Context Map corrections accumulated across issues #12-15 event-storming records into one canonical Context Map conclusion, closing parent spec issue #1.",
+  "ubiquitous_language": [
+    "Hotspot",
+    "Context Map",
+    "Published Language",
+    "Bounded Context",
+    "Task",
+    "Execution",
+    "Delegated Execution",
+    "ToolVersion",
+    "EvaluationSuite",
+    "ToolGrade",
+    "ToolLabSession",
+    "KnowledgeSource",
+    "Provenance",
+    "Concept",
+    "KnowledgeBundle",
+    "KnowledgeWriter",
+    "KnowledgeChunk",
+    "IndexState",
+    "Exact duplicate",
+    "Supersession",
+    "RiskLevel"
+  ],
+  "invariants": [
+    "Every hotspot is either resolved with an explicit decision or deferred to a named later issue (glossary / ADR / tactical design).",
+    "Context Map corrections from issue #13 (Tool Lab GitHub access boundary; Orchestration grade-check skip stale-use risk) are confirmed or recorded as explicit decisions.",
+    "No runtime RiskLevel is inferred from GitHub Project Risk; they are different models.",
+    "This record confirms, defers, or records; it does not reopen resolved decisions or invent new ones.",
+    "Ratification is R1 human-required; no agent may infer, manufacture, or replay the product-owner decision."
+  ],
+  "decisions": [
+    "The Context Map conclusion record lives at my-docs/okf/context-map/conclusion.md as a distinct canonical artifact class from event-storming records (product-owner choice: option B).",
+    "17 resolved hotspots (9 from #12, 8 from #13) are confirmed as-is, carried verbatim from the accepted records.",
+    "2 Context Map corrections from #13 are confirmed: Tool Lab public-unauthenticated GitHub access boundary with private/credential access behind Integration ACL; and Orchestration grade-check skip with the stale-use risk recorded.",
+    "7 deferred hotspots are routed to named later issues: #1 Runtime RiskLevel -> issue #3 + A&S tactical; #2 Tool Lab->Knowledge contract name/schema -> issue #2; #3 Minimum provenance schema -> issue #2 + tactical; #4 'Meaningfully changed' threshold -> issue #2 + tactical; #5 IndexState canonical names -> issue #2; #6 Direct Published Language vs Integration ACL route -> issue #3 / Context Map tactical; #7 OKF/Git partial-failure recovery -> later tactical design / KnowledgeWriter recovery ADR under #3 scope.",
+    "Hotspot #7 (OKF/Git recovery) appears in both #14 and #15 tables; it is recorded once and deferred so no hotspot is left unclassified, satisfying the conclusion invariant.",
+    "The issue #13 'repository Tool vs Skill' hotspot resolution is to defer re-testing SkillVersion to issue #2; this deferral is the explicit resolution and is confirmed here as resolved.",
+    "This is pure OKF ratification work: it belongs on the main checkout (or a short-lived feature branch off main), not a spec worktree, because main owns durable OKF per ADR-0001."
+  ],
+  "implementation_state": "Context Map conclusion record drafted at my-docs/okf/context-map/conclusion.md with status Review. It aggregates 31 hotspots across the four event-storming records, confirms 17 resolved, confirms 2 Context Map corrections, and defers 7 unresolved to issues #2, #3, or later tactical design. The record is on branch feature/16-ratify-context-map off main (baebbbd), uncommitted pending product-owner ratification. No code changed. Parent spec issue #1 remains Progress pending ratification; issue #16 remains Todo pending ratification. The decision to move either to Done is a genuine R1 human decision not yet made.",
+  "changed_code": [
+    "my-docs/okf/context-map/conclusion.md"
+  ],
+  "verification": [
+    {
+      "command": "node scripts/validate-operating-model.mjs",
+      "result": "PASS (to be re-run before claiming completion)",
+      "observed_at": "2026-07-14T07:00:00Z"
+    },
+    {
+      "command": "git diff --check",
+      "result": "clean (to be re-verified before commit)",
+      "observed_at": "2026-07-14T07:00:00Z"
+    },
+    {
+      "command": "node -e schema validation of my-docs/okf/handoffs/issue-16.json against schemas/handoff-brief.schema.json",
+      "result": "PASS: HandoffBrief conforms to schema (all required, no extra)",
+      "observed_at": "2026-07-14T07:00:00Z"
+    }
+  ],
+  "active_lessons": [
+    "lesson-delivery-patterns-are-not-domain-language"
+  ],
+  "open_loops": [
+    "Product-owner ratification of my-docs/okf/context-map/conclusion.md is pending (R1 HITL).",
+    "On ratification: move conclusion.md to Prod, commit on feature/16-ratify-context-map, merge to main, move issue #16 to Done, and move parent #1 to Done.",
+    "Deferred hotspot ownership: issues #2 and #3 must consume the 7 deferred hotspots; issue #2 owns hotspots #2-#5, issue #3 owns #1 and #6 and the KnowledgeWriter recovery ADR for #7.",
+    "The Context Map is Phase-0-only; the Integration ACL route decision (deferred hotspot #6) and deeper relationships are ratified later."
+  ],
+  "next_action": "Present my-docs/okf/context-map/conclusion.md to the product owner for explicit R1 ratification through the HITL Review Inbox; do not move #16 or #1 to Done until the human decides.",
+  "blockers": [],
+  "pending_hitl": [
+    "Ratify the Context Map conclusion record at my-docs/okf/context-map/conclusion.md: confirm the 17 resolved hotspots as-is, confirm the 2 Context Map corrections from issue #13, and accept the deferral of 7 unresolved hotspots to issues #2/#3/later tactical design. R1 human-required; issue #16 status Review; parent #1 remains Progress until ratified."
+  ],
+  "updater": "pi",
+  "session": "pi-2026-07-14-issue-16-ratify-context-map",
+  "updated_at": "2026-07-14T07:00:00Z"
+}
