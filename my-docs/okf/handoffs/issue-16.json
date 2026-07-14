@@ -1,0 +1,94 @@
+{
+  "issue": "ArifMolon/yula#16",
+  "spec": "SPEC-P0-domain-discovery",
+  "bounded_context": "orchestration",
+  "kind": "domain-discovery",
+  "status": "Done",
+  "branch": "feature/16-ratify-context-map",
+  "spec_worktree": "none (OKF-only work on main checkout; domain-discovery spec worktree was cleaned up after #12-14)",
+  "objective": "Ratify the hotspots and Context Map corrections accumulated across issues #12-15 event-storming records into one canonical Context Map conclusion, closing parent spec issue #1.",
+  "ubiquitous_language": [
+    "Hotspot",
+    "Context Map",
+    "Published Language",
+    "Bounded Context",
+    "Task",
+    "Execution",
+    "Delegated Execution",
+    "ToolVersion",
+    "EvaluationSuite",
+    "ToolGrade",
+    "ToolLabSession",
+    "KnowledgeSource",
+    "Provenance",
+    "Concept",
+    "KnowledgeBundle",
+    "KnowledgeWriter",
+    "KnowledgeChunk",
+    "IndexState",
+    "Exact duplicate",
+    "Supersession",
+    "RiskLevel"
+  ],
+  "invariants": [
+    "Every hotspot is either resolved with an explicit decision or deferred to a named later issue (glossary / ADR / tactical design).",
+    "Context Map corrections from issue #13 (Tool Lab GitHub access boundary; Orchestration grade-check skip stale-use risk) are confirmed or recorded as explicit decisions.",
+    "No runtime RiskLevel is inferred from GitHub Project Risk; they are different models.",
+    "This record confirms, defers, or records; it does not reopen resolved decisions or invent new ones.",
+    "Ratification is R1 human-required; no agent may infer, manufacture, or replay the product-owner decision."
+  ],
+  "decisions": [
+    "The Context Map conclusion record lives at my-docs/okf/context-map/conclusion.md as a distinct canonical artifact class from event-storming records (product-owner choice: option B).",
+    "17 resolved hotspots (9 from #12, 8 from #13) are confirmed as-is, carried verbatim from the accepted records.",
+    "2 Context Map corrections from #13 are confirmed: Tool Lab public-unauthenticated GitHub access boundary with private/credential access behind Integration ACL; and Orchestration grade-check skip with the stale-use risk recorded.",
+    "7 deferred hotspots are routed to named later issues: #1 Runtime RiskLevel -> issue #3 + A&S tactical; #2 Tool Lab->Knowledge contract name/schema -> issue #2; #3 Minimum provenance schema -> issue #2 + tactical; #4 'Meaningfully changed' threshold -> issue #2 + tactical; #5 IndexState canonical names -> issue #2; #6 Direct Published Language vs Integration ACL route -> issue #3 / Context Map tactical; #7 OKF/Git partial-failure recovery -> later tactical design / KnowledgeWriter recovery ADR under #3 scope.",
+    "Hotspot #7 (OKF/Git recovery) appears in both #14 and #15 tables; it is recorded once and deferred so no hotspot is left unclassified, satisfying the conclusion invariant.",
+    "The issue #13 'repository Tool vs Skill' hotspot resolution is to defer re-testing SkillVersion to issue #2; this deferral is the explicit resolution and is confirmed here as resolved.",
+    "This is pure OKF ratification work: it belongs on the main checkout (or a short-lived feature branch off main), not a spec worktree, because main owns durable OKF per ADR-0001."
+  ],
+  "implementation_state": "Context Map conclusion record ratified by the product owner on 2026-07-14 and moved to Prod. The record at my-docs/okf/context-map/conclusion.md aggregates 31 hotspots across the four event-storming records, confirms 17 resolved, confirms 2 Context Map corrections, and defers 7 unresolved to issues #2, #3, or later tactical design. Branch feature/16-ratify-context-map was merged into main and pushed. Parent spec issue #1 may move to Done because both exit criteria are satisfied. No code changed; this is pure OKF ratification.",
+  "changed_code": [
+    "my-docs/okf/context-map/conclusion.md"
+  ],
+  "verification": [
+    {
+      "command": "node scripts/validate-operating-model.mjs",
+      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review.",
+      "observed_at": "2026-07-14T07:15:00Z"
+    },
+    {
+      "command": "git diff --check",
+      "result": "clean: no whitespace errors",
+      "observed_at": "2026-07-14T07:15:00Z"
+    },
+    {
+      "command": "manual structural schema validation of my-docs/okf/handoffs/issue-16.json against schemas/handoff-brief.schema.json",
+      "result": "PASS: HandoffBrief conforms to schema (required, additionalProperties, enums, arrays, verification entries)",
+      "observed_at": "2026-07-14T07:15:00Z"
+    },
+    {
+      "command": "markdown link validation of my-docs/okf/context-map/conclusion.md",
+      "result": "PASS: all relative markdown links resolve",
+      "observed_at": "2026-07-14T07:15:00Z"
+    },
+    {
+      "command": "git merge --no-ff feature/16-ratify-context-map into main",
+      "result": "merge commit created (to be recorded with fresh evidence)",
+      "observed_at": "2026-07-14T07:20:00Z"
+    }
+  ],
+  "active_lessons": [
+    "lesson-delivery-patterns-are-not-domain-language"
+  ],
+  "open_loops": [
+    "Deferred hotspot ownership: issues #2 and #3 must consume the 7 deferred hotspots; issue #2 owns hotspots #2-#5 (Tool Lab->Knowledge contract name/schema, minimum provenance schema, 'meaningfully changed' threshold, IndexState canonical names), issue #3 owns #1 (runtime RiskLevel) and #6 (direct Published Language vs Integration ACL route) and the KnowledgeWriter recovery ADR for #7.",
+    "A KnowledgeUpdateRequested (kur-) JSON record was not created for #16 because the schema requires a pull_request reference and #16 is OKF-only on a feature branch with no PR; if the operating model later requires it, create it once a PR or equivalent provenance reference exists.",
+    "The Context Map is Phase-0-only; the Integration ACL route decision (deferred hotspot #6) and deeper relationships are ratified later under issue #3."
+  ],
+  "next_action": "Issue #1 and #16 are Done. Per Faz 0 ordering, the next issues in scope are ArifMolon/yula#2 (Freeze Phase 0 Ubiquitous Language) and then #3 (Ratify Phase 0 architecture ADRs); alternatively #4 (executable monorepo foundation) may come first. The product owner must explicitly place the next issue in scope.",
+  "blockers": [],
+  "pending_hitl": [],
+  "updater": "pi",
+  "session": "pi-2026-07-14-issue-16-ratify-context-map",
+  "updated_at": "2026-07-14T07:20:00Z"
+}
