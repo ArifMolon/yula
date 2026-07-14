@@ -1,0 +1,1 @@
+{"issue":"ArifMolon/yula#16","spec":"SPEC-phase-0-context-map","bounded_context":"orchestration","capability":"Context Map conclusion","merge_commit":"9380df8","events":["ContextMapResolved"],"lessons":[],"verification":["validate-operating-model: pass"],"status":"Done","handoff_brief":{"updated_at":"2026-07-14T00:00:00Z"},"active_claims":[],"pending_hitl":[]}

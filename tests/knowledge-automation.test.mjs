@@ -56,6 +56,36 @@ for (const [name, message] of [
   });
 }
 
+test('doc-only merge with merge_commit and no pull_request is Done-eligible', async () => {
+  const issue = await fixture('done-doc-only-issue');
+  assert.deepEqual(validateDoneEligibility(issue), []);
+});
+
+test('Done eligibility requires pull_request OR merge_commit', async () => {
+  const issue = await fixture('done-feature-issue');
+  delete issue.pull_request;
+  const errors = validateDoneEligibility(issue);
+  assert.ok(errors.some(error => /pull_request|merge_commit/i.test(error)));
+});
+
+test('merge_commit-only knowledge request uses Merge Commit anchor and omits Pull Request line', async () => {
+  const issue = await fixture('done-doc-only-issue');
+  const result = buildKnowledgeUpdate(issue);
+  assert.equal(result.record.merge_commit, '9380df8');
+  assert.equal(result.record.pull_request, undefined);
+  assert.match(result.logEntry, /Merge Commit: 9380df8/);
+  assert.doesNotMatch(result.logEntry, /Pull Request:/);
+});
+
+test('pull_request-only knowledge request keeps Pull Request anchor and omits Merge Commit line', async () => {
+  const issue = await fixture('done-feature-issue');
+  const result = buildKnowledgeUpdate(issue);
+  assert.equal(result.record.pull_request, issue.pull_request);
+  assert.equal(result.record.merge_commit, undefined);
+  assert.match(result.logEntry, /Pull Request:/);
+  assert.doesNotMatch(result.logEntry, /Merge Commit:/);
+});
+
 test('completed spec passes every cleanup invariant', () => {
   assert.deepEqual(validateSpecCleanup({
     merged_to_main: true,

@@ -18,14 +18,16 @@ export function buildKnowledgeUpdate(item) {
     spec: item.spec,
     bounded_context: item.bounded_context,
     capability: item.capability,
-    pull_request: item.pull_request,
+    ...(item.pull_request ? { pull_request: item.pull_request } : {}),
+    ...(item.merge_commit ? { merge_commit: item.merge_commit } : {}),
     events: item.events ?? [],
     lessons: item.lessons ?? [],
     verification: item.verification,
     requested_at: requestedAt,
   };
   const list = values => values.length ? values.join(', ') : 'none';
-  const logEntry = `## ${requestedAt} — KnowledgeUpdateRequested\n\n- Request: ${id}\n- Issue: ${item.issue}\n- Spec: ${item.spec}\n- Bounded Context: ${item.bounded_context}\n- Pull Request: ${item.pull_request}\n- Capability: ${item.capability}\n- Events: ${list(record.events)}\n- Lessons: ${list(record.lessons)}\n- Verification: ${list(record.verification)}\n`;
+  const anchorLine = item.pull_request ? `- Pull Request: ${item.pull_request}\n` : `- Merge Commit: ${item.merge_commit}\n`;
+  const logEntry = `## ${requestedAt} — KnowledgeUpdateRequested\n\n- Request: ${id}\n- Issue: ${item.issue}\n- Spec: ${item.spec}\n- Bounded Context: ${item.bounded_context}\n${anchorLine}- Capability: ${item.capability}\n- Events: ${list(record.events)}\n- Lessons: ${list(record.lessons)}\n- Verification: ${list(record.verification)}\n`
   return { filename: `my-docs/okf/requests/${id}.json`, record, logEntry };
 }
 
