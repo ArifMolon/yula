@@ -1,0 +1,76 @@
+{
+  "issue": "ArifMolon/yula#15",
+  "spec": "SPEC-P0-document-ingestion",
+  "bounded_context": "tool-lab",
+  "kind": "capability",
+  "status": "Progress",
+  "branch": "feature/15-markitdown-local-ingestion",
+  "spec_worktree": ".worktrees/spec-document-ingestion",
+  "objective": "Deliver a local-only, single-file MarkItDown document-ingestion flow that converts approved document types into canonical Knowledge with provenance, idempotent duplicate handling, fail-closed error behavior, and quarantined-file deletion.",
+  "ubiquitous_language": [
+    "Document upload",
+    "Quarantined file",
+    "MarkItDown ToolVersion",
+    "Conversion artifact",
+    "Concept",
+    "KnowledgeBundle",
+    "KnowledgeWriter",
+    "Provenance",
+    "Exact duplicate",
+    "Supersession",
+    "Degraded",
+    "Fail closed",
+    "Suspend",
+    "Published Language"
+  ],
+  "invariants": [
+    "No Concept exists without complete provenance (file identity, content digest, ToolVersion identity, conversion time, Execution/Trace).",
+    "OKF Markdown with provenance and Git history is canonical; FTS5, embeddings, sqlite-vec, KnowledgeChunk, and IndexState are derived.",
+    "A Concept is not durably ingested until its valid OKF change has a successful Git commit.",
+    "All persistent canonical and derived writes cross the single Core KnowledgeWriter boundary.",
+    "Converted content is always untrusted data and cannot authorize effects or alter Policy.",
+    "One accepted file produces one Concept in this flow.",
+    "Exact duplicates are idempotent and never create a second Concept version.",
+    "The MarkItDown ToolVersion is pinned, read-only, local-only, network=none, and plugins disabled.",
+    "The original quarantined file is deleted after persistence succeeds and on Concept deletion.",
+    "No batch upload, archive/ZIP ingestion, URL ingestion, cloud OCR, plugins, or external network access exists in this slice."
+  ],
+  "decisions": [
+    "The product owner explicitly selected issue #15 for local-only MarkItDown document ingestion.",
+    "Issue #15 is owned by the Tool Lab bounded context for delivery; Knowledge owns canonical persistence, supersession, and deletion.",
+    "Issue #15 is the first tracer bullet under a new SPEC-P0-document-ingestion spec, separate from SPEC-P0-domain-discovery.",
+    "Minimum accepted file types for the first slice: PDF, DOCX, PPTX, XLSX, CSV, TXT, Markdown.",
+    "The first version is local-only; no cloud, no URL ingestion, no plugins, no ZIP/archive, no external network.",
+    "A target KnowledgeBundle is not required before upload.",
+    "Single-file upload only; no batch upload in v1.",
+    "Upload performs conversion and canonical persistence in one command.",
+    "The original quarantined file is deleted after persistence and on Concept deletion.",
+    "Exact duplicates are idempotent and return the existing Concept.",
+    "Meaningly changed re-ingestion creates a new Concept and records supersession.",
+    "Encrypted or corrupted files fail closed.",
+    "Scanned documents that require OCR are surfaced as degraded.",
+    "When retries are exhausted, no alternate converter is introduced first; then provenance-bearing user input if available; otherwise suspend execution.",
+    "The repo has no src/ directory or monorepo skeleton yet (Phase 0 WP-0.4 incomplete); the first slice begins with Node.js contract tests and module skeletons, not a real runtime.",
+    "GitHub Project fields configured: Status Todo, Phase 0, Bounded Context Tool Lab, Risk R1, Spec SPEC-P0-document-ingestion, Human Review Required, Size M.",
+    "The spec worktree was bootstrapped at .worktrees/spec-document-ingestion with spec/document-ingestion and feature/15-markitdown-local-ingestion."
+  ],
+  "implementation_state": "Task 1 in progress. The issue #15 event-storming record and this HandoffBrief have been drafted on the main checkout. No source code has been written yet. The spec worktree .worktrees/spec-document-ingestion is active on feature/15-markitdown-local-ingestion. The implementation plan at my-docs/plan/2026-07-14-markitdown-document-ingestion-implementation.md is committed on main.",
+  "changed_code": [
+    "my-docs/okf/event-storming/issue-15-markitdown-document-ingestion-domain-flow.md",
+    "my-docs/okf/handoffs/issue-15.json"
+  ],
+  "verification": [],
+  "active_lessons": [
+    "lesson-delivery-patterns-are-not-domain-language"
+  ],
+  "open_loops": [
+    "The written event-storming record awaits product-owner acceptance before issue #15 can move to Review.",
+    "The repo lacks a src/ directory and monorepo skeleton; the first code slice uses Node.js contract tests and module skeletons."
+  ],
+  "next_action": "Commit the issue #15 OKF artifacts on main, then start Task 2 (pin the MarkItDown tool boundary) in the spec worktree with a failing contract test.",
+  "blockers": [],
+  "pending_hitl": [],
+  "updater": "pi",
+  "session": "pi-2026-07-14-issue-15-markitdown-ingestion",
+  "updated_at": "2026-07-14T05:30:00Z"
+}
