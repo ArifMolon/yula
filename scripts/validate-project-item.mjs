@@ -18,7 +18,8 @@ export function validateDoneEligibility(item) {
   if (item.status !== 'Done') errors.push('Project status must be Done');
   if (!item.handoff_brief) errors.push('latest HandoffBrief is required');
   if (!contexts.has(item.bounded_context)) errors.push('full Bounded Context is required');
-  if (!item.issue || !item.spec || !item.capability || !item.pull_request) errors.push('issue, spec, capability, and pull request are required');
+  if (!item.issue || !item.spec || !item.capability) errors.push('issue, spec, and capability are required');
+  if (!item.pull_request && !item.merge_commit) errors.push('pull_request or merge_commit provenance anchor is required');
   if (!Array.isArray(item.verification) || item.verification.length === 0) errors.push('fresh verification evidence is required');
   if ((item.active_claims ?? []).length) errors.push('unresolved OKF claim blocks Done');
   if ((item.pending_hitl ?? []).length) errors.push('pending required HITL blocks Done');

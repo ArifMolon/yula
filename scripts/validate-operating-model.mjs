@@ -43,11 +43,12 @@ async function validateKnowledgeRequests() {
   let files = [];
   try { files = await filesUnder(directory, '.json'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
   const errors = [];
-  const required = ['request_id', 'issue', 'spec', 'bounded_context', 'capability', 'pull_request', 'events', 'lessons', 'verification', 'requested_at'];
+  const required = ['request_id', 'issue', 'spec', 'bounded_context', 'capability', 'events', 'lessons', 'verification', 'requested_at'];
   for (const file of files) {
     try {
       const request = JSON.parse(await readFile(file, 'utf8'));
       for (const field of required) if (request[field] == null) errors.push(`${file}: missing provenance field ${field}`);
+      if (!request.pull_request && !request.merge_commit) errors.push(`${file}: pull_request or merge_commit provenance anchor is required`);
       if (!Array.isArray(request.verification) || request.verification.length === 0) errors.push(`${file}: verification provenance is empty`);
     } catch (error) { errors.push(`${file}: ${error.message}`); }
   }
