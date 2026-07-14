@@ -1,0 +1,4 @@
+interface:
+  display_name: "YULA Where Am I"
+  short_description: "Fast YULA project resume packet"
+  default_prompt: "Use $yula-wai to get a terse YULA resume packet and the next concrete action."

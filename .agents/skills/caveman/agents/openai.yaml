@@ -1,0 +1,4 @@
+interface:
+  display_name: "Caveman"
+  short_description: "Ultra terse YULA resume packet"
+  default_prompt: "Use $caveman to get the shortest YULA resume packet and next action."
