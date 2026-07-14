@@ -54,23 +54,72 @@
     "GitHub Project fields configured: Status Todo, Phase 0, Bounded Context Tool Lab, Risk R1, Spec SPEC-P0-document-ingestion, Human Review Required, Size M.",
     "The spec worktree was bootstrapped at .worktrees/spec-document-ingestion with spec/document-ingestion and feature/15-markitdown-local-ingestion."
   ],
-  "implementation_state": "Task 1 in progress. The issue #15 event-storming record and this HandoffBrief have been drafted on the main checkout. No source code has been written yet. The spec worktree .worktrees/spec-document-ingestion is active on feature/15-markitdown-local-ingestion. The implementation plan at my-docs/plan/2026-07-14-markitdown-document-ingestion-implementation.md is committed on main.",
+  "implementation_state": "Tasks 1-6 complete. The issue #15 event-storming record and this HandoffBrief are committed on main (01f7c56). The first code slice is committed on feature/15-markitdown-local-ingestion in .worktrees/spec-document-ingestion (f2207ae): Tool Lab pinned MarkItDown tool boundary, Interaction single-file upload command, Orchestration execution bootstrap with failure-state rendering and retry policy, Knowledge canonical persistence with idempotent duplicates, supersession, and quarantined-file deletion cascade. 36 contract tests pass. Operating-model validation and 62 repo tests pass on main. No batch upload, archive/ZIP ingestion, URL ingestion, cloud OCR, plugins, or network access present in the slice. The written event-storming record still awaits explicit product-owner acceptance before the issue can move to Review.",
   "changed_code": [
     "my-docs/okf/event-storming/issue-15-markitdown-document-ingestion-domain-flow.md",
-    "my-docs/okf/handoffs/issue-15.json"
+    "my-docs/okf/handoffs/issue-15.json",
+    "src/tool-lab/markitdown/markitdown-tool-version.mjs",
+    "src/interaction/document-upload/submit-document-source.mjs",
+    "src/orchestration/executions/start-document-ingestion-execution.mjs",
+    "src/knowledge/document-ingestion/persist-converted-concept.mjs",
+    "src/knowledge/document-ingestion/document-ingestion-deletion.mjs",
+    "tests/document-ingestion/markitdown-tool-version.test.mjs",
+    "tests/document-ingestion/submit-document-source.test.mjs",
+    "tests/document-ingestion/start-document-ingestion-execution.test.mjs",
+    "tests/document-ingestion/persist-converted-concept.test.mjs",
+    "tests/document-ingestion/document-ingestion-deletion.test.mjs",
+    "tests/document-ingestion/error-states.test.mjs"
   ],
-  "verification": [],
+  "verification": [
+    {
+      "command": "node --test tests/document-ingestion/*.test.mjs (cwd: .worktrees/spec-document-ingestion)",
+      "result": "tests 36; pass 36; fail 0; cancelled 0; skipped 0; todo 0",
+      "observed_at": "2026-07-14T05:45:00Z"
+    },
+    {
+      "command": "git diff --check (cwd: .worktrees/spec-document-ingestion)",
+      "result": "clean: no whitespace errors",
+      "observed_at": "2026-07-14T05:45:00Z"
+    },
+    {
+      "command": "node --test tests/*.test.mjs (cwd: main checkout)",
+      "result": "tests 62; pass 62; fail 0; cancelled 0; skipped 0; todo 0",
+      "observed_at": "2026-07-14T05:45:00Z"
+    },
+    {
+      "command": "node scripts/validate-operating-model.mjs (cwd: main checkout)",
+      "result": "PASS: 4 schema, 4 policy, 4 template, 2 resolved review.",
+      "observed_at": "2026-07-14T05:45:00Z"
+    },
+    {
+      "command": "node -e schema validation of my-docs/okf/handoffs/issue-15.json against schemas/handoff-brief.schema.json",
+      "result": "PASS: HandoffBrief conforms to schema (all required, no extra)",
+      "observed_at": "2026-07-14T05:45:00Z"
+    },
+    {
+      "command": "rg -ni scope guard for batch|zip|archive|url ingest|cloud ocr|plugin enabl|network allow in src/ (cwd: .worktrees/spec-document-ingestion)",
+      "result": "CLEAN: only rejection comments and disabled/none constraints found; no forbidden scope",
+      "observed_at": "2026-07-14T05:45:00Z"
+    },
+    {
+      "command": "git log --oneline -1 (cwd: .worktrees/spec-document-ingestion)",
+      "result": "f2207ae feat: local-only MarkItDown document ingestion first slice; 11 files changed, 547 insertions(+)",
+      "observed_at": "2026-07-14T05:45:00Z"
+    }
+  ],
   "active_lessons": [
     "lesson-delivery-patterns-are-not-domain-language"
   ],
   "open_loops": [
-    "The written event-storming record awaits product-owner acceptance before issue #15 can move to Review.",
-    "The repo lacks a src/ directory and monorepo skeleton; the first code slice uses Node.js contract tests and module skeletons."
+    "The written event-storming record awaits explicit product-owner acceptance before issue #15 can move to Review.",
+    "The first slice uses Node.js contract tests and in-memory module skeletons; the repo still lacks a real runtime, monorepo skeleton, and the Core KnowledgeWriter implementation.",
+    "The .npmrc file generated by spec-worktree bootstrap is not gitignored; it should be added to .gitignore or the bootstrap script updated.",
+    "The feature branch has not been reviewed, merged into spec/document-ingestion, or pushed."
   ],
-  "next_action": "Commit the issue #15 OKF artifacts on main, then start Task 2 (pin the MarkItDown tool boundary) in the spec worktree with a failing contract test.",
+  "next_action": "Ask the product owner to review the committed first slice and accept the issue #15 event-storming record, then run scripts/spec-worktree finish-feature 15 after review evidence is recorded.",
   "blockers": [],
   "pending_hitl": [],
   "updater": "pi",
   "session": "pi-2026-07-14-issue-15-markitdown-ingestion",
-  "updated_at": "2026-07-14T05:30:00Z"
+  "updated_at": "2026-07-14T05:45:00Z"
 }
